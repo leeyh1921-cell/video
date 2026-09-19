@@ -271,6 +271,73 @@
             transform: translateY(0);
         }
 
+        /* Auto-save Indicator & Toast */
+        .autosave-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: var(--bg-main);
+            border: 1px solid var(--border-light);
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .autosave-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #94a3b8;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .autosave-dot-saved {
+            background: var(--success);
+            box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+        }
+
+        .autosave-dot-saving {
+            background: var(--warning);
+            box-shadow: 0 0 6px rgba(245, 158, 11, 0.5);
+            animation: autosavePulse 0.8s infinite alternate;
+        }
+
+        @keyframes autosavePulse {
+            from { opacity: 0.4; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1.15); }
+        }
+
+        .toast-notification {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #1e293b;
+            color: #ffffff;
+            padding: 12px 18px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .toast-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* Views */
         .view {
             display: none;
@@ -418,6 +485,10 @@
                 <button class="btn-secondary" id="btn-export-md" style="padding: 8px 14px; font-size: 12px; font-weight: 600; border-color: var(--primary); color: var(--primary); display: flex; align-items: center; gap: 6px;" title="전체 분석/대본/프롬프트 결과를 .md 파일로 다운로드">
                     📥 Export (.md)
                 </button>
+                <div class="autosave-badge" id="autosave-indicator" title="모든 작업 내용(검색, 분석, 아이디어, 대본, 프롬프트)이 브라우저에 실시간 자동 저장됩니다.">
+                    <span class="autosave-dot autosave-dot-saved"></span>
+                    <span id="autosave-text">자동 저장 켜짐</span>
+                </div>
                 <span id="api-status" style="margin-left: 8px; font-size: 12px; font-weight: 500; color: var(--warning);">● Not Connected</span>
             </div>
         </header>
@@ -722,6 +793,12 @@
                 <div id="prompts-list" style="display:flex; flex-direction:column; gap:16px;"></div>
             </div>
         </div>
+
+        <!-- Toast Notification -->
+        <div id="toast-notification" class="toast-notification">
+            <span style="font-size: 16px;">✨</span>
+            <span id="toast-message">이전 작업 내용을 자동으로 복원했습니다.</span>
+        </div>
     </main>
 
 
@@ -853,6 +930,10 @@
                     view.classList.remove('active');
                 }
             });
+
+            if (typeof saveProjectState === 'function') {
+                saveProjectState();
+            }
         }
 
         // --- API Keys Validation & Persistence ---
@@ -1539,12 +1620,19 @@
             rowChecks.forEach(cb => {
                 cb.addEventListener('change', updateAnalyzeButton);
             });
+
+            if (typeof saveProjectState === 'function') {
+                saveProjectState();
+            }
         }
 
         function updateAnalyzeButton() {
             const checked = document.querySelectorAll('.row-check:checked');
             btnAnalyzeSelected.disabled = checked.length === 0;
             searchState.selectedVideoIds = new Set(Array.from(checked).map(cb => cb.value));
+            if (typeof saveProjectState === 'function') {
+                saveProjectState();
+            }
         }
 
         // --- Phase 4: Gemini Multi-Video Analysis (단일 및 다중 영상 교차 분석) ---
@@ -1906,6 +1994,10 @@ Analyze and return ONLY a valid JSON object matching this exact schema (No markd
                     `;
                 }).join('');
             }
+
+            if (typeof saveProjectState === 'function') {
+                saveProjectState();
+            }
         }
 
         document.getElementById('btn-goto-ideate').addEventListener('click', () => {
@@ -1999,6 +2091,10 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                     </button>
                 </div>
             `).join('');
+
+            if (typeof saveProjectState === 'function') {
+                saveProjectState();
+            }
         }
 
         window.selectIdea = function(index) {
@@ -2048,6 +2144,10 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                         <div style="font-size:13px; font-weight:600; color:var(--text-primary); margin-top:6px;">${r.action}</div>
                     </div>
                 `).join('');
+            }
+
+            if (typeof saveProjectState === 'function') {
+                saveProjectState();
             }
         };
 
@@ -2284,6 +2384,10 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                 </div>
                 `;
             }).join('');
+
+            if (typeof saveProjectState === 'function') {
+                saveProjectState();
+            }
         }
 
         // --- PHASE 7: Visual Prompts & Master BGM Generation ---
@@ -2683,6 +2787,10 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                 </div>
                 `;
             }).join('');
+
+            if (typeof saveProjectState === 'function') {
+                saveProjectState();
+            }
         }
 
         // --- PHASE 8: Export Full Project to Markdown (.md) ---
@@ -2893,6 +3001,11 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                 if (!confirmed) return;
             }
 
+            // 0. Auto-Save 캐시 초기화
+            if (typeof clearProjectState === 'function') {
+                clearProjectState();
+            }
+
             // 1. Search State 초기화
             searchState.allResults = [];
             searchState.results = [];
@@ -2999,6 +3112,356 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                 createNewProject();
             }
         });
+
+        // =========================================================================
+        // 💾 AUTO-SAVE & STATE RESTORATION ENGINE (실시간 자동 저장 및 복원 엔진)
+        // =========================================================================
+        const AUTOSAVE_STORAGE_KEY = 'namdareun_shorts_autosave_v1';
+        let autosaveTimer = null;
+        let isRestoringState = false;
+
+        function updateAutosaveIndicator(status, extraText) {
+            const indicator = document.getElementById('autosave-indicator');
+            const textEl = document.getElementById('autosave-text');
+            if (!indicator || !textEl) return;
+
+            const dot = indicator.querySelector('.autosave-dot');
+
+            if (status === 'saving') {
+                if (dot) {
+                    dot.className = 'autosave-dot autosave-dot-saving';
+                }
+                textEl.textContent = '저장 중...';
+                indicator.style.color = 'var(--warning)';
+                indicator.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+            } else if (status === 'saved') {
+                if (dot) {
+                    dot.className = 'autosave-dot autosave-dot-saved';
+                }
+                const now = new Date();
+                const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+                textEl.textContent = `자동 저장됨 (${timeStr})`;
+                indicator.style.color = 'var(--success)';
+                indicator.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+            } else if (status === 'restored') {
+                if (dot) {
+                    dot.className = 'autosave-dot autosave-dot-saved';
+                }
+                textEl.textContent = extraText || '이전 작업 복원됨';
+                indicator.style.color = 'var(--primary)';
+                indicator.style.borderColor = 'rgba(79, 70, 229, 0.3)';
+            } else if (status === 'cleared') {
+                if (dot) {
+                    dot.className = 'autosave-dot';
+                }
+                textEl.textContent = '새 프로젝트';
+                indicator.style.color = 'var(--text-secondary)';
+                indicator.style.borderColor = 'var(--border-light)';
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            const msgEl = document.getElementById('toast-message');
+            if (!toast || !msgEl) return;
+            msgEl.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
+        }
+
+        function clearProjectState() {
+            try {
+                localStorage.removeItem(AUTOSAVE_STORAGE_KEY);
+                updateAutosaveIndicator('cleared');
+            } catch (e) {
+                console.warn('Failed to clear autosaved state:', e);
+            }
+        }
+
+        function saveProjectState(immediate = false) {
+            if (isRestoringState) return;
+
+            if (immediate) {
+                if (autosaveTimer) clearTimeout(autosaveTimer);
+                executeAutosave();
+            } else {
+                updateAutosaveIndicator('saving');
+                if (autosaveTimer) clearTimeout(autosaveTimer);
+                autosaveTimer = setTimeout(() => {
+                    executeAutosave();
+                }, 600); // 600ms debounce
+            }
+        }
+
+        function executeAutosave() {
+            try {
+                // 작업 내용이 전혀 없는 빈 프로젝트면 저장하지 않음
+                const hasWork = (searchState.allResults && searchState.allResults.length > 0) ||
+                                (analyzeState && analyzeState.analysisResult !== null) ||
+                                (ideationState && ideationState.ideas && ideationState.ideas.length > 0) ||
+                                (scriptState && scriptState.script !== null) ||
+                                (promptState && promptState.prompts && promptState.prompts.length > 0) ||
+                                (inputSearchQuery && inputSearchQuery.value.trim() !== '');
+
+                if (!hasWork) {
+                    updateAutosaveIndicator('cleared');
+                    return;
+                }
+
+                const chkShorts = document.getElementById('search-shorts-only');
+                const scriptFeedback = document.getElementById('script-revision-feedback');
+                const topicFeedback = document.getElementById('topic-feedback');
+                const durInput = document.getElementById('script-duration');
+                const targetInput = document.getElementById('script-target');
+                const customToneInput = document.getElementById('script-tone-custom');
+
+                const payload = {
+                    version: 1,
+                    savedAt: Date.now(),
+                    currentStep: state.currentStep || 'search',
+                    search: {
+                        query: inputSearchQuery ? inputSearchQuery.value : '',
+                        dateFrom: inputDateFrom ? inputDateFrom.value : '',
+                        dateTo: inputDateTo ? inputDateTo.value : '',
+                        duration: selectDuration ? selectDuration.value : '60',
+                        minViews: inputMinViews ? inputMinViews.value : '',
+                        maxSubs: inputMaxSubs ? inputMaxSubs.value : '',
+                        shortsOnly: chkShorts ? chkShorts.checked : true,
+                        allResults: searchState.allResults || [],
+                        results: searchState.results || [],
+                        selectedVideoIds: Array.from(searchState.selectedVideoIds || [])
+                    },
+                    analyze: {
+                        analyzedVideos: analyzeState.analyzedVideos || [],
+                        analysisResult: analyzeState.analysisResult || null
+                    },
+                    ideation: {
+                        ideas: ideationState.ideas || [],
+                        selectedIdea: ideationState.selectedIdea || null
+                    },
+                    topic: {
+                        feedback: topicFeedback ? topicFeedback.value : ''
+                    },
+                    script: {
+                        script: scriptState.script || null,
+                        characters: scriptState.characters || [],
+                        duration: scriptState.duration || 60,
+                        tone: scriptState.tone || '몰입감 있고 긴박한',
+                        target: scriptState.target || '대중',
+                        durationValue: durInput ? durInput.value : '60',
+                        toneValue: selectTone ? selectTone.value : '몰입감 있고 긴박한',
+                        customToneValue: customToneInput ? customToneInput.value : '',
+                        targetValue: targetInput ? targetInput.value : '대중',
+                        revisionFeedback: scriptFeedback ? scriptFeedback.value : ''
+                    },
+                    prompts: {
+                        prompts: promptState.prompts || [],
+                        characterMasterSheet: promptState.characterMasterSheet || [],
+                        bgmPrompt: promptState.bgmPrompt || null
+                    }
+                };
+
+                localStorage.setItem(AUTOSAVE_STORAGE_KEY, JSON.stringify(payload));
+                updateAutosaveIndicator('saved');
+            } catch (err) {
+                console.warn('Auto-save write error:', err);
+            }
+        }
+
+        function restoreProjectState() {
+            const raw = localStorage.getItem(AUTOSAVE_STORAGE_KEY);
+            if (!raw) return false;
+
+            try {
+                const data = JSON.parse(raw);
+                if (!data || !data.savedAt) return false;
+
+                isRestoringState = true;
+
+                // 1. Search Restore
+                if (data.search) {
+                    if (inputSearchQuery && data.search.query !== undefined) inputSearchQuery.value = data.search.query;
+                    if (inputDateFrom && data.search.dateFrom !== undefined) inputDateFrom.value = data.search.dateFrom;
+                    if (inputDateTo && data.search.dateTo !== undefined) inputDateTo.value = data.search.dateTo;
+                    if (selectDuration && data.search.duration !== undefined) selectDuration.value = data.search.duration;
+                    if (inputMinViews && data.search.minViews !== undefined) inputMinViews.value = data.search.minViews;
+                    if (inputMaxSubs && data.search.maxSubs !== undefined) inputMaxSubs.value = data.search.maxSubs;
+                    const chkShorts = document.getElementById('search-shorts-only');
+                    if (chkShorts && typeof data.search.shortsOnly === 'boolean') {
+                        chkShorts.checked = data.search.shortsOnly;
+                    }
+
+                    if (data.search.allResults && data.search.allResults.length > 0) {
+                        searchState.allResults = data.search.allResults;
+                        searchState.results = data.search.results || data.search.allResults;
+                        searchState.selectedVideoIds = new Set(data.search.selectedVideoIds || []);
+                        renderResults();
+                        updateAnalyzeButton();
+                    }
+                }
+
+                // 2. Analyze Restore
+                if (data.analyze && data.analyze.analysisResult) {
+                    analyzeState.analyzedVideos = data.analyze.analyzedVideos || [];
+                    analyzeState.analysisResult = data.analyze.analysisResult;
+                    renderAnalysis(analyzeState.analysisResult, analyzeState.analyzedVideos);
+                    const analyzeResultsContainer = document.getElementById('analyze-results-container');
+                    if (analyzeResultsContainer) analyzeResultsContainer.style.display = 'block';
+                }
+
+                // 3. Ideation Restore
+                if (data.ideation && data.ideation.ideas && data.ideation.ideas.length > 0) {
+                    ideationState.ideas = data.ideation.ideas;
+                    ideationState.selectedIdea = data.ideation.selectedIdea || null;
+                    renderIdeas();
+                }
+
+                // 4. Topic Select Restore
+                if (data.topic && data.topic.feedback !== undefined) {
+                    const tf = document.getElementById('topic-feedback');
+                    if (tf) tf.value = data.topic.feedback;
+                }
+                if (data.ideation && data.ideation.selectedIdea) {
+                    const idea = data.ideation.selectedIdea;
+                    const topicDetailCard = document.getElementById('topic-detail-card');
+                    if (topicDetailCard) topicDetailCard.style.display = 'block';
+                    const tt = document.getElementById('topic-title');
+                    if (tt) tt.textContent = idea.title;
+                    const scoreBadge = document.getElementById('topic-score-badge');
+                    if (scoreBadge) scoreBadge.textContent = `잠재력 ${idea.potentialScore || 95}점 • 완청률 ${idea.expectedRetention || '85%'}`;
+                    const td = document.getElementById('topic-details');
+                    if (td) {
+                        td.innerHTML = `
+                            <div style="background:var(--bg-main); padding:14px; border-radius:8px; border-left:4px solid var(--primary);">
+                                <div style="font-size:11px; font-weight:800; color:var(--primary); margin-bottom:4px;">🔥 1초 킬러 훅 & 연출 공식</div>
+                                <div style="font-size:15px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">"${idea.hook}"</div>
+                                <div style="font-size:12px; color:var(--text-secondary);">적용 공식: <strong>${idea.hookFormula || '호기심 갭 & 스와이프 방어 훅'}</strong></div>
+                            </div>
+                            <div style="background:var(--bg-main); padding:14px; border-radius:8px;">
+                                <div style="font-size:11px; font-weight:800; color:var(--primary); margin-bottom:4px;">🎯 스토리 전개 및 완청 극대화 전략</div>
+                                <div style="font-size:13px; color:var(--text-primary); line-height:1.5;">${idea.strategy || idea.whyItWorks}</div>
+                            </div>
+                            <div style="background:var(--bg-main); padding:14px; border-radius:8px;">
+                                <div style="font-size:11px; font-weight:800; color:var(--primary); margin-bottom:4px;">🧠 바이럴 심리학적 성공 요인</div>
+                                <div style="font-size:13px; color:var(--text-primary); line-height:1.5;">${idea.whyItWorks}</div>
+                            </div>
+                        `;
+                    }
+                    const timelinePreview = document.getElementById('topic-timeline-preview');
+                    if (timelinePreview) {
+                        const roadmap = idea.storylineRoadmap || [
+                            { phase: "0~3초", action: "초강력 훅으로 스와이프 방어 및 호기심 유발" },
+                            { phase: "3~15초", action: "문제 심화 및 기대감 증폭" },
+                            { phase: "15~40초", action: "결정적 단서 및 빠른 템포의 진실 공개" },
+                            { phase: "40초~끝", action: "도파민 보상 & 댓글/공유 유도 루프" }
+                        ];
+                        timelinePreview.innerHTML = roadmap.map(r => `
+                            <div style="background:var(--bg-surface); border:1px solid var(--border-light); padding:12px 16px; border-radius:8px;">
+                                <span style="font-size:10px; font-weight:800; color:var(--primary); background:var(--primary-glow); padding:2px 6px; border-radius:4px; font-family:monospace;">${r.phase}</span>
+                                <div style="font-size:13px; font-weight:600; color:var(--text-primary); margin-top:6px;">${r.action}</div>
+                            </div>
+                        `).join('');
+                    }
+                }
+
+                // 5. Script Restore
+                if (data.script) {
+                    scriptState.duration = data.script.duration || 60;
+                    scriptState.tone = data.script.tone || '몰입감 있고 긴박한';
+                    scriptState.target = data.script.target || '대중';
+                    const durInput = document.getElementById('script-duration');
+                    if (durInput && data.script.durationValue) durInput.value = data.script.durationValue;
+                    if (selectTone && data.script.toneValue) {
+                        selectTone.value = data.script.toneValue;
+                        if (data.script.toneValue === 'custom') {
+                            if (customToneWrapper) customToneWrapper.style.display = 'flex';
+                            const customInput = document.getElementById('script-tone-custom');
+                            if (customInput && data.script.customToneValue) customInput.value = data.script.customToneValue;
+                        }
+                    }
+                    const targetInput = document.getElementById('script-target');
+                    if (targetInput && data.script.targetValue) targetInput.value = data.script.targetValue;
+                    const feedbackInput = document.getElementById('script-revision-feedback');
+                    if (feedbackInput && data.script.revisionFeedback) feedbackInput.value = data.script.revisionFeedback;
+
+                    if (data.script.script && data.script.script.length > 0) {
+                        scriptState.script = data.script.script;
+                        scriptState.characters = data.script.characters || [];
+                        const scriptConfig = document.getElementById('script-config');
+                        if (scriptConfig) scriptConfig.style.display = 'block';
+                        renderScript();
+                    }
+                }
+
+                // 6. Prompts Restore
+                if (data.prompts && ((data.prompts.prompts && data.prompts.prompts.length > 0) || data.prompts.bgmPrompt)) {
+                    promptState.prompts = data.prompts.prompts || [];
+                    promptState.characterMasterSheet = data.prompts.characterMasterSheet || [];
+                    promptState.bgmPrompt = data.prompts.bgmPrompt || null;
+                    renderPrompts(promptState);
+                }
+
+                // 7. Navigation Step Restore
+                if (data.currentStep && viewTitles[data.currentStep]) {
+                    navigate(data.currentStep);
+                }
+
+                const savedDate = new Date(data.savedAt);
+                const timeStr = `${String(savedDate.getHours()).padStart(2, '0')}:${String(savedDate.getMinutes()).padStart(2, '0')}`;
+                updateAutosaveIndicator('restored', `작업 복원됨 (${timeStr})`);
+                showToast('✨ 이전 작업 내용을 자동으로 복원했습니다.');
+                return true;
+            } catch (err) {
+                console.error('Failed to restore autosaved state:', err);
+                return false;
+            } finally {
+                isRestoringState = false;
+            }
+        }
+
+        // --- Input Event Listeners for Auto-Save ---
+        function initAutoSaveListeners() {
+            // 1. Search Inputs
+            if (inputSearchQuery) inputSearchQuery.addEventListener('input', () => saveProjectState(false));
+            if (inputDateFrom) inputDateFrom.addEventListener('change', () => saveProjectState(false));
+            if (inputDateTo) inputDateTo.addEventListener('change', () => saveProjectState(false));
+            if (selectDuration) selectDuration.addEventListener('change', () => saveProjectState(false));
+            if (inputMinViews) inputMinViews.addEventListener('input', () => saveProjectState(false));
+            if (inputMaxSubs) inputMaxSubs.addEventListener('input', () => saveProjectState(false));
+            const chkShorts = document.getElementById('search-shorts-only');
+            if (chkShorts) chkShorts.addEventListener('change', () => saveProjectState(false));
+
+            // 2. Topic & Feedback Inputs
+            const topicFeedback = document.getElementById('topic-feedback');
+            if (topicFeedback) topicFeedback.addEventListener('input', () => saveProjectState(false));
+
+            // 3. Script Settings & Feedback Inputs
+            const durInput = document.getElementById('script-duration');
+            if (durInput) durInput.addEventListener('input', () => saveProjectState(false));
+            if (selectTone) selectTone.addEventListener('change', () => saveProjectState(false));
+            const customToneInput = document.getElementById('script-tone-custom');
+            if (customToneInput) customToneInput.addEventListener('input', () => saveProjectState(false));
+            const targetInput = document.getElementById('script-target');
+            if (targetInput) targetInput.addEventListener('input', () => saveProjectState(false));
+            const scriptFeedback = document.getElementById('script-revision-feedback');
+            if (scriptFeedback) scriptFeedback.addEventListener('input', () => saveProjectState(false));
+
+            // 4. Window beforeunload fallback
+            window.addEventListener('beforeunload', () => {
+                saveProjectState(true);
+            });
+
+            // 5. Initial State Restoration
+            const hasRestored = restoreProjectState();
+            if (!hasRestored) {
+                updateAutosaveIndicator('cleared');
+            }
+        }
+
+        // Initialize Auto-Save on Load
+        initAutoSaveListeners();
 
     </script>
 </body>
