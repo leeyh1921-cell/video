@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,21 +11,21 @@
             --bg-sidebar: #172036;
             --bg-main: #F4F6F9;
             --bg-surface: #FFFFFF;
-            
+
             --text-primary: #0F172A;
             --text-secondary: #64748B;
             --text-inverse: #FFFFFF;
             --text-sidebar: #94A3B8;
-            
+
             --primary: #2563EB;
             --primary-hover: #1D4ED8;
             --sidebar-active-bg: #222E4B;
-            
+
             --success: #10B981;
             --success-bg: #D1FAE5;
             --danger: #EF4444;
             --warning: #F59E0B;
-            
+
             --border-light: #E2E8F0;
         }
 
@@ -308,8 +309,15 @@
         }
 
         @keyframes autosavePulse {
-            from { opacity: 0.4; transform: scale(0.85); }
-            to { opacity: 1; transform: scale(1.15); }
+            from {
+                opacity: 0.4;
+                transform: scale(0.85);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1.15);
+            }
         }
 
         .toast-notification {
@@ -350,8 +358,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Cards / Widgets */
@@ -372,7 +387,10 @@
         /* Modal */
         .modal {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.5);
             display: none;
             justify-content: center;
@@ -433,21 +451,28 @@
             gap: 12px;
             margin-top: 24px;
         }
-
     </style>
 </head>
+
 <body>
     <!-- Sidebar Overlay for mobile -->
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
-        <div class="logo" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-start;">
+        <div class="logo"
+            style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-start;">
             <div id="btn-logo-home" style="cursor: pointer;" title="첫 화면(홈)으로 이동">
-                <div style="font-size: 20px; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #a5b4fc, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">남다른AI</div>
-                <div style="font-size: 13px; font-weight: 600; color: var(--text-sidebar); margin-top: 4px; letter-spacing: -0.2px; opacity: 0.85;">Shorts 분석기</div>
+                <div
+                    style="font-size: 20px; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(135deg, #a5b4fc, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    남다른AI</div>
+                <div
+                    style="font-size: 13px; font-weight: 600; color: var(--text-sidebar); margin-top: 4px; letter-spacing: -0.2px; opacity: 0.85;">
+                    Shorts 분석기</div>
             </div>
-            <button id="btn-sidebar-collapse" style="background: none; border: none; color: var(--text-sidebar); cursor: pointer; font-size: 16px; padding: 4px;" title="사이드바 접기 (Ctrl+B)">◀</button>
+            <button id="btn-sidebar-collapse"
+                style="background: none; border: none; color: var(--text-sidebar); cursor: pointer; font-size: 16px; padding: 4px;"
+                title="사이드바 접기 (Ctrl+B)">◀</button>
         </div>
 
         <!-- New Project Button (Sidebar) -->
@@ -468,7 +493,8 @@
     <!-- Main Content -->
     <main class="main-content">
         <!-- Header -->
-        <header class="header" style="background: var(--bg-surface); border-bottom: 1px solid var(--border-light); margin-bottom: 24px; padding: 20px 32px;">
+        <header class="header"
+            style="background: var(--bg-surface); border-bottom: 1px solid var(--border-light); margin-bottom: 24px; padding: 20px 32px;">
             <div style="display: flex; align-items: center; gap: 14px;">
                 <button class="btn-toggle-sidebar" id="btn-toggle-sidebar" title="사이드바 열기/접기 (Ctrl+B)">
                     ☰
@@ -476,20 +502,28 @@
                 <h1 id="page-title">Search</h1>
             </div>
             <div class="header-actions" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                <input type="password" id="yt-api-key" placeholder="YouTube API Key" style="padding: 8px 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 12px; width: 160px;">
-                <input type="password" id="gemini-api-key" placeholder="Gemini API Key" style="padding: 8px 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 12px; width: 160px;">
+                <input type="password" id="yt-api-key" placeholder="YouTube API Key"
+                    style="padding: 8px 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 12px; width: 160px;">
+                <input type="password" id="gemini-api-key" placeholder="Gemini API Key"
+                    style="padding: 8px 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 12px; width: 160px;">
                 <button class="btn-primary" id="btn-api-save" style="padding: 8px 16px;">Save Keys</button>
-                <button class="btn-new-project-header" id="btn-new-project-header" title="새 프로젝트 시작 (작업 내용 초기화, 단축키: Alt+N)">
+                <button class="btn-new-project-header" id="btn-new-project-header"
+                    title="새 프로젝트 시작 (작업 내용 초기화, 단축키: Alt+N)">
                     <span>✨</span> 새로만들기
                 </button>
-                <button class="btn-secondary" id="btn-export-md" style="padding: 8px 14px; font-size: 12px; font-weight: 600; border-color: var(--primary); color: var(--primary); display: flex; align-items: center; gap: 6px;" title="전체 분석/대본/프롬프트 결과를 .md 파일로 다운로드">
+                <button class="btn-secondary" id="btn-export-md"
+                    style="padding: 8px 14px; font-size: 12px; font-weight: 600; border-color: var(--primary); color: var(--primary); display: flex; align-items: center; gap: 6px;"
+                    title="전체 분석/대본/프롬프트 결과를 .md 파일로 다운로드">
                     📥 Export (.md)
                 </button>
-                <div class="autosave-badge" id="autosave-indicator" title="모든 작업 내용(검색, 분석, 아이디어, 대본, 프롬프트)이 브라우저에 실시간 자동 저장됩니다.">
+                <div class="autosave-badge" id="autosave-indicator"
+                    title="모든 작업 내용(검색, 분석, 아이디어, 대본, 프롬프트)이 브라우저에 실시간 자동 저장됩니다.">
                     <span class="autosave-dot autosave-dot-saved"></span>
                     <span id="autosave-text">자동 저장 켜짐</span>
                 </div>
-                <span id="api-status" style="margin-left: 8px; font-size: 12px; font-weight: 500; color: var(--warning);">● Not Connected</span>
+                <span id="api-status"
+                    style="margin-left: 8px; font-size: 12px; font-weight: 500; color: var(--warning);">● Not
+                    Connected</span>
             </div>
         </header>
 
@@ -499,51 +533,78 @@
             <div class="card">
                 <h2>Search Configuration</h2>
                 <div style="display: flex; gap: 16px; margin-bottom: 12px;">
-                    <input type="text" id="search-query" placeholder="검색어 입력 (예: 중국무협드라마, 쇼츠, AI, 여행 등)" style="flex:1; padding: 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px;">
-                    <button class="btn-primary" id="btn-search" style="padding: 10px 24px; font-weight: 600;">Search YouTube</button>
+                    <input type="text" id="search-query" placeholder="검색어 입력 (예: 중국무협드라마, 쇼츠, AI, 여행 등)"
+                        style="flex:1; padding: 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px;">
+                    <button class="btn-primary" id="btn-search" style="padding: 10px 24px; font-weight: 600;">Search
+                        YouTube</button>
                 </div>
-                
+
                 <!-- Presets & Shorts Optimization Toggle -->
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
                     <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                         <span style="font-size: 12px; color: var(--text-secondary); font-weight: bold;">Presets:</span>
-                        <span class="preset-tag" data-preset="viral" style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">🔥 지금 떡상</span>
+                        <span class="preset-tag" data-preset="viral"
+                            style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">🔥
+                            지금 떡상</span>
                         <span style="color: var(--border-light);">|</span>
-                        <span class="preset-tag" data-preset="small-channel" style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">🚀 작은 채널 대박</span>
+                        <span class="preset-tag" data-preset="small-channel"
+                            style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">🚀
+                            작은 채널 대박</span>
                         <span style="color: var(--border-light);">|</span>
-                        <span class="preset-tag" data-preset="trending" style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">⚡ 급상승</span>
+                        <span class="preset-tag" data-preset="trending"
+                            style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">⚡
+                            급상승</span>
                         <span style="color: var(--border-light);">|</span>
-                        <span class="preset-tag" data-preset="all-time" style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">🌐 전체 기간</span>
+                        <span class="preset-tag" data-preset="all-time"
+                            style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">🌐
+                            전체 기간</span>
                         <span style="color: var(--border-light);">|</span>
-                        <span class="preset-tag" data-preset="reset" style="cursor: pointer; font-size: 12px; color: var(--text-secondary); padding: 4px 2px; text-decoration: underline;">초기화</span>
+                        <span class="preset-tag" data-preset="reset"
+                            style="cursor: pointer; font-size: 12px; color: var(--text-secondary); padding: 4px 2px; text-decoration: underline;">초기화</span>
                     </div>
 
-                    <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-primary); font-weight: 600; cursor: pointer; user-select: none;" title="체크 시 유튜브 API에 쇼츠 및 단편 영상(4분 미만)을 우선 요청하여 풀버전 드라마가 검색되는 문제를 방지합니다.">
-                        <input type="checkbox" id="search-shorts-only" checked style="cursor: pointer; accent-color: var(--primary); width: 16px; height: 16px;">
+                    <label
+                        style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-primary); font-weight: 600; cursor: pointer; user-select: none;"
+                        title="체크 시 유튜브 API에 쇼츠 및 단편 영상(4분 미만)을 우선 요청하여 풀버전 드라마가 검색되는 문제를 방지합니다.">
+                        <input type="checkbox" id="search-shorts-only" checked
+                            style="cursor: pointer; accent-color: var(--primary); width: 16px; height: 16px;">
                         <span>⚡ 쇼츠(#shorts) 최적화 검색</span>
                     </label>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 16px;">
                     <div class="input-group">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                             <label style="margin-bottom: 0;">Upload Date (게시 기간)</label>
                             <div style="display: flex; gap: 4px;">
-                                <button type="button" class="btn-date-quick" data-range="all" style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);" title="전체 기간 검색">전체</button>
-                                <button type="button" class="btn-date-quick" data-range="365" style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);" title="최근 1년">1년</button>
-                                <button type="button" class="btn-date-quick" data-range="90" style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);" title="최근 3개월">3개월</button>
-                                <button type="button" class="btn-date-quick" data-range="30" style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);" title="최근 1개월">1개월</button>
+                                <button type="button" class="btn-date-quick" data-range="all"
+                                    style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);"
+                                    title="전체 기간 검색">전체</button>
+                                <button type="button" class="btn-date-quick" data-range="365"
+                                    style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);"
+                                    title="최근 1년">1년</button>
+                                <button type="button" class="btn-date-quick" data-range="90"
+                                    style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);"
+                                    title="최근 3개월">3개월</button>
+                                <button type="button" class="btn-date-quick" data-range="30"
+                                    style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);"
+                                    title="최근 1개월">1개월</button>
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 6px;">
-                            <input type="date" id="filter-date-from" style="flex: 1; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                            <input type="date" id="filter-date-from"
+                                style="flex: 1; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
                             <span style="color: var(--text-secondary); font-size: 12px;">~</span>
-                            <input type="date" id="filter-date-to" style="flex: 1; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                            <input type="date" id="filter-date-to"
+                                style="flex: 1; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
                         </div>
                     </div>
                     <div class="input-group">
                         <label>Max Duration (영상 길이)</label>
-                        <select id="filter-duration" style="padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                        <select id="filter-duration"
+                            style="padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
                             <option value="60" selected>1분 이내 (≤ 60초)</option>
                             <option value="180">3분 이내 (≤ 180초)</option>
                             <option value="gt300">5분 초과 (> 300초)</option>
@@ -552,38 +613,60 @@
                     </div>
                     <div class="input-group">
                         <label>Min Views (최소 조회수)</label>
-                        <input type="number" id="filter-views" placeholder="예: 10000" style="padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                        <input type="number" id="filter-views" placeholder="예: 10000"
+                            style="padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
                     </div>
                     <div class="input-group">
                         <label>Max Subscribers (최대 구독자)</label>
-                        <input type="number" id="filter-subs" placeholder="예: 500000" style="padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                        <input type="number" id="filter-subs" placeholder="예: 500000"
+                            style="padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
                     </div>
                 </div>
             </div>
 
             <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <h2>Results <span id="result-count" style="color: var(--text-secondary); font-size: 12px; font-weight: normal;">(0 videos)</span></h2>
+                    <h2>Results <span id="result-count"
+                            style="color: var(--text-secondary); font-size: 12px; font-weight: normal;">(0
+                            videos)</span></h2>
                     <button class="btn-primary" id="btn-analyze-selected" disabled>Analyze Selected</button>
                 </div>
-                
+
                 <div style="overflow-x: auto;">
                     <table style="width: 100%; border-collapse: collapse; text-align: left;" id="results-table">
                         <thead>
                             <tr>
-                                <th style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);"><input type="checkbox" id="check-all"></th>
-                                <th style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">Video</th>
-                                <th style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">Views</th>
-                                <th style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">Subs</th>
-                                <th style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">V/S Ratio</th>
-                                <th style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">Velocity</th>
-                                <th style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">Outlier</th>
-                                <th style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">Viral Score</th>
+                                <th
+                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                    <input type="checkbox" id="check-all"></th>
+                                <th
+                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                    Video</th>
+                                <th
+                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                    Views</th>
+                                <th
+                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                    Subs</th>
+                                <th
+                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                    V/S Ratio</th>
+                                <th
+                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                    Velocity</th>
+                                <th
+                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                    Outlier</th>
+                                <th
+                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                    Viral Score</th>
                             </tr>
                         </thead>
                         <tbody id="results-body">
                             <tr>
-                                <td colspan="8" style="padding: 32px; text-align: center; color: var(--text-secondary); font-size: 14px;">No videos to display. Try searching.</td>
+                                <td colspan="8"
+                                    style="padding: 32px; text-align: center; color: var(--text-secondary); font-size: 14px;">
+                                    No videos to display. Try searching.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -595,44 +678,54 @@
         <div id="view-analyze" class="view">
             <div class="card" id="analyze-loading" style="display: none;">
                 <h2 id="analyze-progress-text">영상 데이터 및 시각/스토리 구조 분석 중...</h2>
-                <p style="color:var(--text-secondary); font-size:14px;">Gemini Multimodal API를 통해 1초 훅, 시청 지속 장치, 영상/이미지 연출 DNA를 추출하고 있습니다.</p>
+                <p style="color:var(--text-secondary); font-size:14px;">Gemini Multimodal API를 통해 1초 훅, 시청 지속 장치, 영상/이미지
+                    연출 DNA를 추출하고 있습니다.</p>
             </div>
-            
+
             <div id="analyze-results-container" style="display: none;">
                 <!-- 1. 분석 대상 영상 목록 -->
                 <div class="card">
                     <h2 id="analyze-summary-title">Analyzed Target Videos (분석 대상)</h2>
-                    <div id="analyzed-videos-list" style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px;"></div>
+                    <div id="analyzed-videos-list" style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px;">
+                    </div>
                 </div>
 
                 <!-- 2. 11대 핵심 바이럴 메커니즘 분석 -->
                 <div class="card">
                     <h2>🎯 11대 바이럴 메커니즘 & 성공 공식 분석</h2>
-                    <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">첫 1초 훅부터 호기심 갭, 정보 순서, 자막/BGM 타이밍까지 체계적으로 해체한 공식입니다.</p>
-                    <div id="viral-mechanisms-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;"></div>
+                    <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">첫 1초 훅부터 호기심 갭, 정보 순서,
+                        자막/BGM 타이밍까지 체계적으로 해체한 공식입니다.</p>
+                    <div id="viral-mechanisms-grid"
+                        style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;"></div>
                 </div>
 
                 <!-- 3. 스크립트 구간별 타임라인 전략 -->
                 <div class="card">
                     <h2>⏱️ 스크립트 구간별 타임라인 스토리 전략</h2>
-                    <div id="timeline-strategies" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;"></div>
+                    <div id="timeline-strategies"
+                        style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;"></div>
                 </div>
-                
+
                 <!-- 4. 이미지 & 영상 시각 연출 분석 (프롬프트 생성 직접 연계) -->
                 <div class="card">
                     <h2>🎨 시각 연출 & 비디오 스타일 DNA (초정밀 프롬프트 역설계)</h2>
-                    <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">영상 컷 전환, 렌즈/화각, 카메라 무빙, 조명, 색감 톤앤매너, 질감 렌더링 스타일을 세밀히 역설계하여 고품질 이미지/비디오 프롬프트에 자동 반영합니다.</p>
-                    <div id="visual-style-dna" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;"></div>
+                    <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">영상 컷 전환, 렌즈/화각, 카메라 무빙,
+                        조명, 색감 톤앤매너, 질감 렌더링 스타일을 세밀히 역설계하여 고품질 이미지/비디오 프롬프트에 자동 반영합니다.</p>
+                    <div id="visual-style-dna"
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+                    </div>
                 </div>
 
                 <!-- 5. 시청자 댓글 인사이트 -->
                 <div class="card">
                     <h2>💬 시청자 반응 & 결핍 니즈 분석</h2>
-                    <div id="comment-insights" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;"></div>
+                    <div id="comment-insights"
+                        style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;"></div>
                 </div>
-                
+
                 <div style="display: flex; justify-content: flex-end; margin-bottom: 32px;">
-                    <button class="btn-primary" id="btn-goto-ideate" style="padding: 12px 28px; font-size: 15px; font-weight: 600;">이 분석 공식으로 6개 소재 발굴하기 ➔</button>
+                    <button class="btn-primary" id="btn-goto-ideate"
+                        style="padding: 12px 28px; font-size: 15px; font-weight: 600;">이 분석 공식으로 6개 소재 발굴하기 ➔</button>
                 </div>
             </div>
         </div>
@@ -641,13 +734,15 @@
         <div id="view-ideate" class="view">
             <div class="card" id="ideate-loading" style="display: none;">
                 <h2>새로운 6개 소재 발굴 중...</h2>
-                <p style="color:var(--text-secondary); font-size:14px;">추출된 바이럴 공식과 Content DNA를 바탕으로 6개의 독창적인 떡상 아이디어를 생성하고 있습니다.</p>
+                <p style="color:var(--text-secondary); font-size:14px;">추출된 바이럴 공식과 Content DNA를 바탕으로 6개의 독창적인 떡상 아이디어를
+                    생성하고 있습니다.</p>
             </div>
-            
+
             <div id="ideate-results-container" style="display: none;">
                 <div class="card" style="margin-bottom: 20px;">
                     <h2>💡 발굴된 6가지 맞춤형 쇼츠 아이디어</h2>
-                    <p style="font-size:13px; color:var(--text-secondary);">가장 마음에 드는 주제를 선택하면 정밀 기획 로드맵을 확인하고 피드백을 줄 수 있습니다.</p>
+                    <p style="font-size:13px; color:var(--text-secondary);">가장 마음에 드는 주제를 선택하면 정밀 기획 로드맵을 확인하고 피드백을 줄 수
+                        있습니다.</p>
                 </div>
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;" id="idea-cards">
                     <!-- 6 Idea Cards -->
@@ -660,26 +755,34 @@
             <div class="card" id="topic-detail-card" style="display:none;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
                     <h2 id="topic-title" style="font-size:20px; color:var(--text-primary);">주제 제목</h2>
-                    <span id="topic-score-badge" style="background:var(--success-bg); color:var(--success); padding:4px 10px; border-radius:6px; font-size:12px; font-weight:bold;">잠재력 95점</span>
+                    <span id="topic-score-badge"
+                        style="background:var(--success-bg); color:var(--success); padding:4px 10px; border-radius:6px; font-size:12px; font-weight:bold;">잠재력
+                        95점</span>
                 </div>
-                
+
                 <!-- 상세 전략 로드맵 그리드 -->
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;" id="topic-details"></div>
-                
+
                 <!-- 구간별 기획 프리뷰 -->
-                <div style="margin-top:20px; border:1px solid var(--border-light); padding:16px; border-radius:8px; background:var(--bg-main);">
-                    <h3 style="font-size:14px; font-weight:700; margin-bottom:8px; color:var(--primary);">🎯 구간별 스토리텔링 전개 로드맵</h3>
-                    <div id="topic-timeline-preview" style="display:flex; flex-direction:column; gap:8px; font-size:13px;"></div>
+                <div
+                    style="margin-top:20px; border:1px solid var(--border-light); padding:16px; border-radius:8px; background:var(--bg-main);">
+                    <h3 style="font-size:14px; font-weight:700; margin-bottom:8px; color:var(--primary);">🎯 구간별 스토리텔링
+                        전개 로드맵</h3>
+                    <div id="topic-timeline-preview"
+                        style="display:flex; flex-direction:column; gap:8px; font-size:13px;"></div>
                 </div>
 
                 <div style="margin-top:24px;">
                     <h3 style="font-size:14px; margin-bottom:8px; font-weight:600;">✍️ 추가 기획 피드백 및 요청사항 (Optional)</h3>
-                    <textarea id="topic-feedback" placeholder="예: 2030 직장인이 공감할 수 있는 톤으로 해줘, 첫 문장을 더 충격적인 질문으로 시작해줘, 40초 분량으로 핵심만 압축해줘..." style="width:100%; height:90px; padding:12px; border:1px solid var(--border-light); border-radius:8px; font-size:13px; line-height:1.5;"></textarea>
+                    <textarea id="topic-feedback"
+                        placeholder="예: 2030 직장인이 공감할 수 있는 톤으로 해줘, 첫 문장을 더 충격적인 질문으로 시작해줘, 40초 분량으로 핵심만 압축해줘..."
+                        style="width:100%; height:90px; padding:12px; border:1px solid var(--border-light); border-radius:8px; font-size:13px; line-height:1.5;"></textarea>
                 </div>
-                
+
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px;">
                     <button class="btn-secondary" onclick="navigate('ideate')">← 다른 주제 선택</button>
-                    <button class="btn-primary" id="btn-confirm-topic" style="padding: 12px 28px; font-size: 15px; font-weight: 600;">이 전략으로 대본 생성하기 ➔</button>
+                    <button class="btn-primary" id="btn-confirm-topic"
+                        style="padding: 12px 28px; font-size: 15px; font-weight: 600;">이 전략으로 대본 생성하기 ➔</button>
                 </div>
             </div>
         </div>
@@ -690,15 +793,18 @@
                 <h2>Script Configuration & Options</h2>
                 <div style="display:flex; gap:16px; margin-top:16px; flex-wrap:wrap; align-items:flex-end;">
                     <div style="display:flex; flex-direction:column; gap:4px;">
-                        <label style="font-size:11px; color:var(--text-secondary); font-weight:600;">목표 길이 (초 단위 직접 입력)</label>
+                        <label style="font-size:11px; color:var(--text-secondary); font-weight:600;">목표 길이 (초 단위 직접
+                            입력)</label>
                         <div style="display:flex; align-items:center; gap:6px;">
-                            <input type="number" id="script-duration" value="60" min="10" max="180" step="5" style="width:90px; padding:8px 12px; border:1px solid var(--border-light); border-radius:8px; font-size:13px; font-weight:600; text-align:center;">
+                            <input type="number" id="script-duration" value="60" min="10" max="180" step="5"
+                                style="width:90px; padding:8px 12px; border:1px solid var(--border-light); border-radius:8px; font-size:13px; font-weight:600; text-align:center;">
                             <span style="font-size:13px; color:var(--text-primary); font-weight:500;">초</span>
                         </div>
                     </div>
                     <div style="display:flex; flex-direction:column; gap:4px; min-width:220px;">
                         <label style="font-size:11px; color:var(--text-secondary); font-weight:600;">나레이션 톤</label>
-                        <select id="script-tone" style="padding:8px 12px; border:1px solid var(--border-light); border-radius:8px; font-size:13px;">
+                        <select id="script-tone"
+                            style="padding:8px 12px; border:1px solid var(--border-light); border-radius:8px; font-size:13px;">
                             <option value="몰입감 있고 긴박한 (Urgent & Suspenseful)" selected>⚡ 몰입감 있고 긴박한</option>
                             <option value="도발적이고 충격적인 (Provocative & Shocking)">💥 도발적이고 충격적인</option>
                             <option value="친근하고 재치있는 (Friendly & Witty)">😄 친근하고 재치있는</option>
@@ -709,16 +815,20 @@
                             <option value="custom">✏️ 직접 입력 (기타)...</option>
                         </select>
                     </div>
-                    <div id="custom-tone-wrapper" style="display:none; flex-direction:column; gap:4px; flex:1; min-width:180px;">
+                    <div id="custom-tone-wrapper"
+                        style="display:none; flex-direction:column; gap:4px; flex:1; min-width:180px;">
                         <label style="font-size:11px; color:var(--primary); font-weight:700;">사용자 지정 나레이션 톤 입력</label>
-                        <input type="text" id="script-tone-custom" placeholder="예: 시니컬한 뉴스 앵커 톤, AI 기계음 같은 무미건조한 톤..." style="padding:8px 12px; border:1px solid var(--primary); border-radius:8px; font-size:13px;">
+                        <input type="text" id="script-tone-custom" placeholder="예: 시니컬한 뉴스 앵커 톤, AI 기계음 같은 무미건조한 톤..."
+                            style="padding:8px 12px; border:1px solid var(--primary); border-radius:8px; font-size:13px;">
                     </div>
                     <div style="display:flex; flex-direction:column; gap:4px; flex:1; min-width:180px;">
                         <label style="font-size:11px; color:var(--text-secondary); font-weight:600;">타겟 시청자</label>
-                        <input type="text" id="script-target" placeholder="예: 2030 직장인, 테크 관심자, 학생 등" style="padding:8px 12px; border:1px solid var(--border-light); border-radius:8px; font-size:13px;">
+                        <input type="text" id="script-target" placeholder="예: 2030 직장인, 테크 관심자, 학생 등"
+                            style="padding:8px 12px; border:1px solid var(--border-light); border-radius:8px; font-size:13px;">
                     </div>
                     <div>
-                        <button class="btn-primary" id="btn-generate-script" style="padding:9px 24px; font-weight:600;">Generate Script</button>
+                        <button class="btn-primary" id="btn-generate-script"
+                            style="padding:9px 24px; font-weight:600;">Generate Script</button>
                     </div>
                 </div>
             </div>
@@ -737,16 +847,21 @@
 
                     <!-- 등장인물 얼굴 & 복장 고정 명세서 컨테이너 -->
                     <div id="script-characters-container" style="margin-bottom:20px;"></div>
-                    
-                    <div id="script-scenes" style="display:flex; flex-direction:column; gap:16px; margin-top:16px;"></div>
+
+                    <div id="script-scenes" style="display:flex; flex-direction:column; gap:16px; margin-top:16px;">
+                    </div>
 
                     <!-- 대본 수정 & 재생성 피드백 박스 -->
                     <div style="margin-top:28px; border-top:1px solid var(--border-light); padding-top:20px;">
                         <h3 style="font-size:14px; font-weight:700; margin-bottom:8px;">🔄 스크립트 수정 및 재생성 피드백</h3>
-                        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:10px;">마음에 들지 않는 부분이나 추가하고 싶은 멘트를 입력하면 대본을 즉시 반영하여 다시 작성합니다.</p>
+                        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:10px;">마음에 들지 않는 부분이나 추가하고
+                            싶은 멘트를 입력하면 대본을 즉시 반영하여 다시 작성합니다.</p>
                         <div style="display:flex; gap:12px;">
-                            <textarea id="script-revision-feedback" placeholder="예: 2번 씬 나레이션을 더 긴박하게 바꿔줘, 마지막에 댓글 참여 유도 CTA 멘트 넣어줘..." style="flex:1; height:64px; padding:10px; border:1px solid var(--border-light); border-radius:8px; font-size:13px;"></textarea>
-                            <button class="btn-secondary" id="btn-regenerate-script" style="padding:0 20px; font-weight:600; white-space:nowrap; border-color:var(--primary); color:var(--primary);">
+                            <textarea id="script-revision-feedback"
+                                placeholder="예: 2번 씬 나레이션을 더 긴박하게 바꿔줘, 마지막에 댓글 참여 유도 CTA 멘트 넣어줘..."
+                                style="flex:1; height:64px; padding:10px; border:1px solid var(--border-light); border-radius:8px; font-size:13px;"></textarea>
+                            <button class="btn-secondary" id="btn-regenerate-script"
+                                style="padding:0 20px; font-weight:600; white-space:nowrap; border-color:var(--primary); color:var(--primary);">
                                 🔄 대본 재생성
                             </button>
                         </div>
@@ -754,7 +869,9 @@
 
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px;">
                         <button class="btn-secondary" onclick="navigate('select')">← 기획 전략 수정</button>
-                        <button class="btn-primary" id="btn-goto-prompts" style="padding: 12px 28px; font-size: 15px; font-weight: 600;">시각 프롬프트(이미지 & 영상) 생성하기 ➔</button>
+                        <button class="btn-primary" id="btn-goto-prompts"
+                            style="padding: 12px 28px; font-size: 15px; font-weight: 600;">시각 프롬프트(이미지 & 영상) 생성하기
+                            ➔</button>
                     </div>
                 </div>
             </div>
@@ -764,17 +881,21 @@
         <div id="view-prompts" class="view">
             <div class="card" id="prompts-loading" style="display:none;">
                 <h2>🎨 비주얼 및 BGM 프롬프트 생성 중...</h2>
-                <p style="color:var(--text-secondary); font-size:14px;">1단계에서 분석한 시각/사운드 스타일 DNA와 고정된 인물/복장 사양을 바탕으로 씬별 미드저니/비디오 프롬프트와 전체 쇼츠 전용 Master BGM 프롬프트를 작성 중입니다.</p>
+                <p style="color:var(--text-secondary); font-size:14px;">1단계에서 분석한 시각/사운드 스타일 DNA와 고정된 인물/복장 사양을 바탕으로 씬별
+                    미드저니/비디오 프롬프트와 전체 쇼츠 전용 Master BGM 프롬프트를 작성 중입니다.</p>
             </div>
-            
+
             <div id="prompts-results-container" style="display:none;">
                 <div class="card" style="margin-bottom:20px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                    <div
+                        style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
                         <div>
                             <h2>🎨 Production Prompts (Visual & Master BGM)</h2>
-                            <p style="font-size:13px; color:var(--text-secondary); margin-top:4px;">모든 씬에서 주인공과 주변 인물의 얼굴 및 복장이 100% 일관되게 고정된 이미지/비디오 프롬프트입니다.</p>
+                            <p style="font-size:13px; color:var(--text-secondary); margin-top:4px;">모든 씬에서 주인공과 주변 인물의
+                                얼굴 및 복장이 100% 일관되게 고정된 이미지/비디오 프롬프트입니다.</p>
                         </div>
-                        <button class="btn-primary" id="btn-download-all-md" style="padding:10px 20px; font-weight:600; display:flex; align-items:center; gap:6px;">
+                        <button class="btn-primary" id="btn-download-all-md"
+                            style="padding:10px 20px; font-weight:600; display:flex; align-items:center; gap:6px;">
                             📥 전체 프로젝트 (.md) 저장
                         </button>
                     </div>
@@ -787,7 +908,8 @@
                 <div id="bgm-prompt-container" style="margin-bottom:24px;"></div>
 
                 <!-- 3. Scene-by-Scene Visual Prompts -->
-                <div style="margin-bottom:12px; font-size:15px; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
+                <div
+                    style="margin-bottom:12px; font-size:15px; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
                     <span>🎬 씬별 비주얼 생성 프롬프트 (Midjourney v6 & AI Video - 인물/복장 일관성 고정)</span>
                 </div>
                 <div id="prompts-list" style="display:flex; flex-direction:column; gap:16px;"></div>
@@ -909,10 +1031,10 @@
 
         function navigate(step) {
             state.currentStep = step;
-            
+
             // Update Sidebar
             navItems.forEach(item => {
-                if(item.getAttribute('data-step') === step) {
+                if (item.getAttribute('data-step') === step) {
                     item.classList.add('active');
                 } else {
                     item.classList.remove('active');
@@ -924,7 +1046,7 @@
 
             // Update Views
             views.forEach(view => {
-                if(view.id === 'view-' + step) {
+                if (view.id === 'view-' + step) {
                     view.classList.add('active');
                 } else {
                     view.classList.remove('active');
@@ -940,7 +1062,7 @@
         // LocalStorage에서 기존 저장된 키 불러오기
         const savedYtKey = localStorage.getItem('yt_api_key') || '';
         const savedGeminiKey = localStorage.getItem('gemini_api_key') || '';
-        
+
         if (savedYtKey) {
             inputYtKey.value = savedYtKey;
             state.apiKeys.youtube = savedYtKey;
@@ -1105,7 +1227,7 @@
             const today = new Date();
             const past30Days = new Date();
             past30Days.setDate(today.getDate() - 30);
-            
+
             inputDateTo.value = today.toISOString().split('T')[0];
             inputDateFrom.value = past30Days.toISOString().split('T')[0];
         }
@@ -1116,7 +1238,7 @@
             tag.addEventListener('click', (e) => {
                 const preset = e.currentTarget.getAttribute('data-preset');
                 const today = new Date();
-                
+
                 if (preset === 'viral') {
                     // 🔥 지금 떡상: 최근 7일, 1분 이내, 최소 5만 조회수
                     const past7Days = new Date();
@@ -1172,7 +1294,7 @@
                 const range = e.currentTarget.getAttribute('data-range');
                 const today = new Date();
                 inputDateTo.value = today.toISOString().split('T')[0];
-                
+
                 if (range === 'all') {
                     inputDateFrom.value = '';
                     inputDateTo.value = '';
@@ -1255,7 +1377,7 @@
             btnSearch.textContent = 'Searching...';
             btnSearch.disabled = true;
             resultsBody.innerHTML = '<tr><td colspan="8" style="padding: 32px; text-align: center; color: var(--text-secondary);">YouTube에서 영상 검색 및 분석 데이터를 불러오는 중...</td></tr>';
-            
+
             try {
                 await executeSearch(query);
             } catch (error) {
@@ -1392,7 +1514,7 @@
             const toVal = inputDateTo.value;
             const dateFrom = fromVal ? new Date(fromVal + 'T00:00:00') : null;
             const dateTo = toVal ? new Date(toVal + 'T23:59:59') : null;
-            
+
             const durationFilter = selectDuration.value; // '60', '180', 'gt300', 'all'
             const minViews = inputMinViews.value ? parseInt(inputMinViews.value, 10) : null;
             const maxSubs = inputMaxSubs.value ? parseInt(inputMaxSubs.value, 10) : null;
@@ -1425,7 +1547,7 @@
         function calculateMetrics(video, channel) {
             const stats = video.statistics || {};
             const chStats = channel ? channel.statistics : null;
-            
+
             const views = parseInt(stats.viewCount || 0);
             const likes = parseInt(stats.likeCount || 0);
             const comments = parseInt(stats.commentCount || 0);
@@ -1437,7 +1559,7 @@
             const publishedAt = new Date(video.snippet.publishedAt);
             const now = new Date();
             const hoursSinceUpload = Math.max((now - publishedAt) / (1000 * 60 * 60), 1);
-            
+
             // View Velocity (Views / day)
             const viewsPerDay = (views / hoursSinceUpload) * 24;
 
@@ -1458,7 +1580,7 @@
             const normVs = Math.min(vsRatio / 5, 1) * 100;
             const normVelocity = Math.min(viewsPerDay / 100000, 1) * 100;
             const normEng = Math.min(engRate / 10, 1) * 100;
-            
+
             const daysSinceUpload = hoursSinceUpload / 24;
             const normFreshness = Math.max(100 - (daysSinceUpload * 2), 0);
 
@@ -1499,7 +1621,7 @@
         function renderResults() {
             resultCount.textContent = `(${searchState.results.length} videos)`;
             resultsBody.innerHTML = '';
-            
+
             if (searchState.results.length === 0) {
                 if (searchState.allResults && searchState.allResults.length > 0) {
                     const durationText = selectDuration.options[selectDuration.selectedIndex]?.text || '설정된 길이';
@@ -1573,11 +1695,11 @@
 
             searchState.results.forEach(item => {
                 const tr = document.createElement('tr');
-                
+
                 // Badges
                 let vsBadge = item.vsRatio >= 3 ? `<span style="background:var(--success-bg); color:var(--success); padding:2px 6px; border-radius:4px; font-size:10px; font-weight:bold;">🔥 ${item.vsRatio.toFixed(1)}x</span>` : `${item.vsRatio.toFixed(1)}x`;
                 let outlierBadge = item.outlier >= 3 ? `<span style="background:var(--success-bg); color:var(--success); padding:2px 6px; border-radius:4px; font-size:10px; font-weight:bold;">🚀 ${item.outlier.toFixed(1)}x</span>` : `${item.outlier.toFixed(1)}x`;
-                
+
                 tr.innerHTML = `
                     <td style="padding: 12px; border-bottom: 1px solid var(--border-light);">
                         <input type="checkbox" class="row-check" value="${item.id}">
@@ -1605,18 +1727,18 @@
                 `;
                 resultsBody.appendChild(tr);
             });
-            
+
             // Checkbox logic
             const checkAll = document.getElementById('check-all');
             const rowChecks = document.querySelectorAll('.row-check');
-            
+
             checkAll.checked = false;
             checkAll.addEventListener('change', (e) => {
                 const isChecked = e.target.checked;
                 rowChecks.forEach(cb => cb.checked = isChecked);
                 updateAnalyzeButton();
             });
-            
+
             rowChecks.forEach(cb => {
                 cb.addEventListener('change', updateAnalyzeButton);
             });
@@ -1644,7 +1766,7 @@
         const analyzeLoading = document.getElementById('analyze-loading');
         const analyzeResultsContainer = document.getElementById('analyze-results-container');
         const progressText = document.getElementById('analyze-progress-text');
-        
+
         btnAnalyzeSelected.addEventListener('click', async () => {
             if (!state.apiKeys.gemini) {
                 alert('Gemini API 키가 설정되지 않았어. 상단에서 Gemini API 키를 먼저 입력하고 저장해 줘.');
@@ -1673,15 +1795,15 @@
                     const cList = await fetchComments(v.id);
                     commentsMap[v.id] = cList;
                 }));
-                
+
                 // 2. Gemini AI 교차 바이럴 패턴 분석
                 progressText.textContent = `Gemini AI가 ${selectedVideos.length}개 영상의 성공 패턴 및 Content DNA를 분석 중...`;
                 const analysisResult = await analyzeWithGemini(selectedVideos, commentsMap);
-                
+
                 analyzeState.analyzedVideos = selectedVideos;
                 analyzeState.analysisResult = analysisResult;
                 renderAnalysis(analysisResult, selectedVideos);
-                
+
                 analyzeLoading.style.display = 'none';
                 analyzeResultsContainer.style.display = 'block';
             } catch (error) {
@@ -1696,7 +1818,7 @@
             try {
                 const url = `https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=${videoId}&maxResults=30&order=relevance&key=${apiKey}`;
                 const res = await fetch(url);
-                if(!res.ok) return [];
+                if (!res.ok) return [];
                 const data = await res.json();
                 return (data.items || []).map(item => item.snippet.topLevelComment.snippet.textOriginal);
             } catch (e) {
@@ -1752,7 +1874,7 @@
 
         async function callGemini(apiKey, prompt, isJson = true) {
             const candidateModels = await getAvailableGeminiModels(apiKey);
-            
+
             let lastError = null;
             for (const model of candidateModels) {
                 try {
@@ -1773,25 +1895,25 @@
                     if (!res.ok) {
                         const errData = await res.json().catch(() => ({}));
                         const errMsg = errData.error?.message || `HTTP ${res.status}`;
-                        
+
                         // 404(미지원/Deprecated), 503(High demand), 429(Rate limit) 등 발생 시 다음 모델로 즉시 Fallback
-                        const isRetryable = res.status === 404 || 
-                                            res.status === 503 || 
-                                            res.status === 429 || 
-                                            res.status === 500 ||
-                                            errMsg.toLowerCase().includes('no longer available') ||
-                                            errMsg.toLowerCase().includes('demand') ||
-                                            errMsg.toLowerCase().includes('capacity') ||
-                                            errMsg.toLowerCase().includes('overloaded') ||
-                                            errMsg.toLowerCase().includes('not found') ||
-                                            errMsg.toLowerCase().includes('not supported');
+                        const isRetryable = res.status === 404 ||
+                            res.status === 503 ||
+                            res.status === 429 ||
+                            res.status === 500 ||
+                            errMsg.toLowerCase().includes('no longer available') ||
+                            errMsg.toLowerCase().includes('demand') ||
+                            errMsg.toLowerCase().includes('capacity') ||
+                            errMsg.toLowerCase().includes('overloaded') ||
+                            errMsg.toLowerCase().includes('not found') ||
+                            errMsg.toLowerCase().includes('not supported');
 
                         if (isRetryable) {
                             console.warn(`[Gemini AI] ${model} 실패 (${errMsg}). 다음 모델로 자동 전환합니다...`);
                             lastError = new Error(`[${model}] ${errMsg}`);
                             continue; // 다음 최신 모델로 즉시 재시도
                         }
-                        
+
                         throw new Error(`Gemini API 요청 실패 (${model}): ${errMsg}`);
                     }
 
@@ -1803,13 +1925,13 @@
                     lastError = err;
                     const errStr = (err.message || '').toLowerCase();
                     const isRetryable = errStr.includes('no longer available') ||
-                                        errStr.includes('demand') || 
-                                        errStr.includes('capacity') || 
-                                        errStr.includes('overloaded') || 
-                                        errStr.includes('not found') || 
-                                        errStr.includes('not supported') ||
-                                        errStr.includes('503') ||
-                                        errStr.includes('429');
+                        errStr.includes('demand') ||
+                        errStr.includes('capacity') ||
+                        errStr.includes('overloaded') ||
+                        errStr.includes('not found') ||
+                        errStr.includes('not supported') ||
+                        errStr.includes('503') ||
+                        errStr.includes('429');
 
                     if (!isRetryable) {
                         throw err;
@@ -1826,7 +1948,7 @@
 
         async function analyzeWithGemini(videos, commentsMap) {
             const apiKey = state.apiKeys.gemini;
-            
+
             let videosContext = videos.map((v, idx) => {
                 const comments = (commentsMap[v.id] || []).slice(0, 20);
                 return `
@@ -2009,11 +2131,11 @@ Analyze and return ONLY a valid JSON object matching this exact schema (No markd
         async function triggerIdeation() {
             document.getElementById('ideate-loading').style.display = 'block';
             document.getElementById('ideate-results-container').style.display = 'none';
-            
+
             const apiKey = state.apiKeys.gemini;
             const dna = analyzeState.analysisResult?.contentDNA || {};
             const query = inputSearchQuery.value || '쇼츠 트렌드';
-            
+
             const prompt = `
 You are a viral YouTube Shorts Producer who has generated billions of views.
 Based on the search keyword "${query}" and the extracted Content DNA & Viral Mechanics below:
@@ -2046,7 +2168,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
     ]
 }
 `;
-            
+
             try {
                 const ideasData = await callGemini(apiKey, prompt, true);
                 ideationState.ideas = ideasData.ideas || [];
@@ -2061,7 +2183,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
         function renderIdeas() {
             document.getElementById('ideate-loading').style.display = 'none';
             document.getElementById('ideate-results-container').style.display = 'block';
-            
+
             const container = document.getElementById('idea-cards');
             container.innerHTML = ideationState.ideas.map((idea, index) => `
                 <div class="card" style="margin-bottom:0; display:flex; flex-direction:column; justify-content:space-between; border:1px solid var(--border-light); background:var(--bg-surface); transition:all 0.2s ease;">
@@ -2097,14 +2219,14 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
             }
         }
 
-        window.selectIdea = function(index) {
+        window.selectIdea = function (index) {
             ideationState.selectedIdea = ideationState.ideas[index];
             navigate('select');
-            
+
             const idea = ideationState.selectedIdea;
             document.getElementById('topic-detail-card').style.display = 'block';
             document.getElementById('topic-title').textContent = idea.title;
-            
+
             const scoreBadge = document.getElementById('topic-score-badge');
             if (scoreBadge) {
                 scoreBadge.textContent = `잠재력 ${idea.potentialScore || 95}점 • 완청률 ${idea.expectedRetention || '85%'}`;
@@ -2175,12 +2297,12 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
         async function generateOrRegenerateScript(feedbackText = '') {
             document.getElementById('script-loading').style.display = 'block';
             document.getElementById('script-results-container').style.display = 'none';
-            
+
             const apiKey = state.apiKeys.gemini;
             const topic = ideationState.selectedIdea;
             const durationInput = parseInt(document.getElementById('script-duration').value, 10);
             const duration = !isNaN(durationInput) && durationInput >= 10 ? durationInput : 60;
-            
+
             let tone = selectTone ? selectTone.value : '몰입감 있고 긴박한';
             if (tone === 'custom') {
                 const customVal = document.getElementById('script-tone-custom')?.value.trim();
@@ -2235,11 +2357,20 @@ ${isRegen ? `\n[CRITICAL USER REVISION FEEDBACK - MUST APPLY THESE CHANGES STRIC
    - In "visual", describe their action while explicitly preserving their fixed costume and appearance.
 
 [STRICT SCRIPTWRITING CONSTRAINTS - MUST FOLLOW 100%]
-1. 🚨 STRICT SINGLE SENTENCE RULE (한 문장 엄수): Every scene's narration MUST be EXACTLY ONE single, punchy Korean spoken sentence (절대 두 문장 이상 쓰지 마시오. 한 씬에 오직 1개의 완결된 단문 문장만 작성).
-2. SCENE 1 (0~3s) MUST immediately speak the hook with high impact.
-3. Spoken Korean Dialogue (자연스러운 한국어 구어체): Write rhythmic, colloquial, and engaging dialogue without awkward translations.
-4. Visual Direction: Describe exact camera movement, lighting, and action reflecting the Visual Style DNA.
-5. 📝 Screen Caption (화면 자막): 화면 자막(caption)은 축약 키워드가 아니라, 시청자가 화면을 보며 읽을 수 있는 해당 씬의 한국어 대사 또는 나레이션 전문을 그대로 작성하시오 (나레이션/대사와 정확히 일치).
+1. 🚨 STRICT SEPARATION OF NARRATION & CHARACTER DIALOGUE (나레이션과 등장인물 대사 100% 엄격 분리):
+   - "narration": 화면 밖 전문 성우나 해설자가 시청자에게 상황/정보/맥락을 전달하는 3인칭 보이스오버(VO)입니다. (화면 속 등장인물이 입을 움직여 말하지 않음). 모든 배경 설명, 상황 묘사, 관찰자 해설은 반드시 이 필드에만 작성하시오. 나레이션이 없는 씬은 빈 문자열("")로 두시오.
+   - "speaker": 화면에서 대사를 말하는 등장인물의 정확한 이름 (예: "주인공 이현", "호위무사 단우"). 대사가 없는 씬은 반드시 "없음"으로 작성하시오.
+   - "dialogue": 화면 속 등장인물이 직접 자신의 입을 열어 상대방에게 말하는 순수 대사(립싱크)입니다. (반드시 큰따옴표 없는 순수 대사 텍스트). 인물 대사가 없는 씬은 반드시 빈 문자열("")로 두시오.
+   - 🚨 절대 금지: 나레이션(3인칭 설명/해설)을 등장인물 대사(dialogue)에 절대로 넣지 마시오! 등장인물이 직접 상대방에게 말하는 극적인 발화가 아닌 이상 dialogue는 반드시 빈 문자열("")이어야 합니다.
+   - [씬 연출 유형 가이드]:
+     * 유형 A (나레이션 전용 씬): 성우 해설 위주 -> narration에 작성, speaker: "없음", dialogue: ""
+     * 유형 B (등장인물 대사 전용 씬): 인물이 직접 말함 -> speaker: "인물명", dialogue: "대사 내용", narration: ""
+     * 유형 C (나레이션+대사 복합 씬): 배경 설명 후 인물의 결정적 한마디 -> narration과 dialogue 각각의 필드에 분리 작성
+   - 한 씬당 음성 길이는 최대 1~2문장 단문으로 엄격 제한하여 빠른 숏폼 템포 유지.
+2. SCENE 1 (0~3s) MUST immediately deliver the hook with high impact (나레이션 또는 주인공의 충격적인 대사로 시작).
+3. Spoken Korean Dialogue (생생하고 자연스러운 한국어 구어체): 번역투가 아닌 리드미컬하고 몰입감 넘치는 대사와 해설 작성.
+4. Visual Direction: Describe exact camera movement, lighting, and character action reflecting the Visual Style DNA. (인물 대사가 없는 씬은 인물이 입을 다물고 시네마틱 행동 연기에 집중하도록 묘사).
+5. 📝 Screen Caption (화면 자막): 화면에 자막으로 뜰 텍스트를 작성하시오 (해당 씬에서 시청자가 읽을 핵심 대사 또는 나레이션 전문).
 6. Provide SFX & BGM cues for video editors.
 
 Return ONLY a valid JSON object matching this schema (pure JSON, no markdown backticks):
@@ -2258,9 +2389,11 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
             "sceneNumber": 1,
             "time": "0:00 - 0:03",
             "charactersPresent": ["주인공 이현"],
-            "narration": "오직 단 1개의 강렬한 단문 한국어 대사 (두 문장 절대 금지)",
-            "visual": "카메라 앵글, 조명, 고정 복장을 착용한 피사체의 액션 디테일 (한국어)",
+            "narration": "성우/해설자의 3인칭 보이스오버 해설 (없으면 빈 문자열 '')",
+            "speaker": "대사를 말하는 등장인물 이름 (대사 없으면 '없음')",
+            "dialogue": "화면 속 인물이 직접 입을 열어 말하는 대사 (없으면 빈 문자열 '')",
             "caption": "화면에 자막으로 뜰 한국어 대사 또는 나레이션 전문",
+            "visual": "카메라 앵글, 조명, 고정 복장을 착용한 피사체의 액션 디테일 (한국어)",
             "sfx": "효과음 및 BGM 타이밍 (예: Fast Whoosh + Sub Bass Drop)"
         }
     ]
@@ -2270,16 +2403,30 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
             try {
                 const scriptData = await callGemini(apiKey, prompt, true);
                 const scenes = scriptData.scenes || [];
-                // 화면 자막이 비어있을 경우 나레이션 대사로 자동 안전 보장
+                // 나레이션 및 등장인물 대사 무결성 보장 및 자막 안전 처리
                 scenes.forEach(s => {
+                    s.narration = (s.narration || '').trim();
+                    s.dialogue = (s.dialogue || '').trim();
+                    if (!s.dialogue) {
+                        s.speaker = '없음';
+                    } else {
+                        s.speaker = (s.speaker && s.speaker !== '없음' && s.speaker !== 'None')
+                            ? s.speaker.trim()
+                            : (s.charactersPresent && s.charactersPresent[0] ? s.charactersPresent[0] : '등장인물');
+                    }
+                    // 대사와 나레이션이 동일하게 복사된 이상 현상 방지
+                    if (s.dialogue && s.dialogue === s.narration) {
+                        s.dialogue = '';
+                        s.speaker = '없음';
+                    }
                     if (!s.caption || s.caption.trim() === '') {
-                        s.caption = s.narration;
+                        s.caption = s.dialogue || s.narration || '';
                     }
                 });
                 scriptState.script = scenes;
                 scriptState.characters = scriptData.characters || [];
                 renderScript();
-            } catch(e) {
+            } catch (e) {
                 console.error(e);
                 alert(`대본 생성 중 오류: ${e.message}`);
                 document.getElementById('script-loading').style.display = 'none';
@@ -2325,7 +2472,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                                 ${characters.map((c, i) => `
                                     <div style="background:var(--bg-main); border:1px solid var(--border-light); border-radius:8px; padding:14px; display:flex; flex-direction:column; gap:8px;">
                                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                                            <span style="font-size:14px; font-weight:800; color:var(--primary);">${c.name || `인물 ${i+1}`}</span>
+                                            <span style="font-size:14px; font-weight:800; color:var(--primary);">${c.name || `인물 ${i + 1}`}</span>
                                             <span style="font-size:10px; font-weight:700; background:var(--bg-surface); border:1px solid #818cf8; color:#4f46e5; padding:2px 6px; border-radius:4px;">${c.role || '등장인물'}</span>
                                         </div>
                                         <div style="font-size:12px; color:var(--text-primary); line-height:1.5;">
@@ -2343,7 +2490,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                     charsContainer.innerHTML = '';
                 }
             }
-            
+
             // 2. 씬별 대본 렌더링
             document.getElementById('script-scenes').innerHTML = scriptState.script.map(s => {
                 const charTag = (s.charactersPresent && s.charactersPresent.length > 0)
@@ -2360,14 +2507,41 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                     </div>
                     
                     <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:14px;">
-                        <div style="background:var(--bg-surface); padding:12px; border-radius:8px; border:1px solid var(--border-light);">
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-                                <div style="font-size:10px; font-weight:800; color:var(--primary);">🎙️ NARRATION (단문 대사)</div>
-                                <span style="font-size:9px; color:var(--success); background:var(--success-bg); padding:1px 4px; border-radius:3px; font-weight:700;">1문장</span>
+                        <div style="background:var(--bg-surface); padding:12px; border-radius:8px; border:1px solid var(--border-light); display:flex; flex-direction:column; gap:10px;">
+                            <!-- 1. 나레이션 영역 -->
+                            <div style="background:var(--bg-main); border:1px solid var(--border-light); border-left:3px solid #6366f1; padding:8px 10px; border-radius:6px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                                    <span style="font-size:10px; font-weight:800; color:#6366f1; display:flex; align-items:center; gap:4px;">
+                                        🎙️ 나레이션 (Voiceover / 성우 해설)
+                                    </span>
+                                    <span style="font-size:9px; color:var(--text-secondary); font-weight:600;">${s.narration ? '보이스오버' : '해설 없음'}</span>
+                                </div>
+                                <div style="font-size:13px; font-weight:600; color:${s.narration ? 'var(--text-primary)' : 'var(--text-secondary)'}; line-height:1.45;">
+                                    ${s.narration || '<span style="font-style:italic; font-size:11px; font-weight:normal;">(나레이션 없음 - 인물 대사 및 영상 중심 전개)</span>'}
+                                </div>
                             </div>
-                            <div style="font-size:14px; font-weight:700; color:var(--text-primary); line-height:1.5;">${s.narration}</div>
-                            <div style="margin-top:8px; font-size:11px; color:var(--text-secondary);">
-                                📝 <strong>화면 자막 (대사/나레이션):</strong> <span style="color:var(--text-primary); font-weight:600;">"${s.caption || s.narration || ''}"</span>
+
+                            <!-- 2. 등장인물 대사 영역 -->
+                            <div style="background:var(--bg-main); border:1px solid var(--border-light); border-left:3px solid #059669; padding:8px 10px; border-radius:6px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                                    <span style="font-size:10px; font-weight:800; color:#059669; display:flex; align-items:center; gap:4px;">
+                                        💬 등장인물 대사 (Dialogue & 립싱크)
+                                    </span>
+                                    ${(s.speaker && s.speaker !== '없음' && s.speaker !== 'None')
+                                        ? `<span style="font-size:9px; font-weight:700; background:#d1fae5; color:#065f46; padding:1px 6px; border-radius:3px;">👤 ${s.speaker}</span>`
+                                        : `<span style="font-size:9px; color:var(--text-secondary);">인물 발화 없음</span>`}
+                                </div>
+                                <div style="font-size:13px; font-weight:700; color:${s.dialogue ? '#047857' : 'var(--text-secondary)'}; line-height:1.45;">
+                                    ${s.dialogue 
+                                        ? `"${s.dialogue}"` 
+                                        : '<span style="font-style:italic; font-size:11px; font-weight:normal;">(등장인물 대사 없음 - 나레이션 및 행동 연기 중심)</span>'}
+                                </div>
+                            </div>
+
+                            <!-- 3. 화면 자막 -->
+                            <div style="padding-top:4px; font-size:11px; color:var(--text-secondary); border-top:1px dashed var(--border-light); display:flex; align-items:baseline; gap:6px;">
+                                <span style="font-weight:700; color:var(--primary); white-space:nowrap;">📝 화면 자막:</span>
+                                <span style="color:var(--text-primary); font-weight:600; word-break:break-all;">"${s.caption || s.dialogue || s.narration || ''}"</span>
                             </div>
                         </div>
 
@@ -2410,7 +2584,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                 motionVFXPacing: "1.2s cut pace with speed ramp",
                 promptModifiers: "8k resolution, cinematic lighting, shot on ARRI Alexa 35mm, volumetric atmosphere"
             };
-            
+
             const prompt = `
 You are an elite AI Cinematographer, Prompt Engineer & Sound Designer specialized in Midjourney v6, AI Video generators (Kling 1.5, Runway Gen-3 Alpha, Hailuo AI, Luma Dream Machine, Sora), and AI Music generators (Suno v3.5, Udio).
 
@@ -2436,35 +2610,58 @@ ${characters && characters.length > 0 ? JSON.stringify(characters, null, 2) : 'N
 [Script Scenes]
 ${JSON.stringify(scenes)}
 
-[CRITICAL REQUIREMENT: ALL-IN-ONE DIRECT-PASTE AI VIDEO PROMPT (비디오 원클릭 생성 프롬프트)]
-The user requires that every scene's "videoPrompt" can be DIRECTLY COPIED AND PASTED into AI Video generators (Kling 1.5, Runway Gen-3, Hailuo AI, Luma) to generate the complete video immediately.
-Therefore, "videoPrompt" MUST fully integrate ALL 5 of the following elements in one cohesive prompt text:
-1. 🎙️ **등장인물 및 말하는 대사/나레이션 (Character, Spoken Dialogue & Lip Sync)**:
-   - Identify the character with locked face and costume.
-   - Explicitly instruct the character speaking with natural lip sync and facial expression:
-     e.g. [Character Name] speaking with intense emotion: "[Exact Korean Dialogue from scene]", mouth moving in realistic synchronization with speech, sharp resolute gaze.
-2. 🎥 **카메라 무빙 및 화각 (Camera Movement & Cinematic Framing)**:
-   - Precise camera motion matching the Visual DNA:
-     e.g. Rapid low-angle push-in tracking shot, dynamic 35mm lens framing, subtle handheld drift, whip pan, tilt.
-3. 💡 **조명 연출 및 대기 (Lighting Architecture & Atmosphere)**:
-   - Specific lighting setup:
-     e.g. Moody chiaroscuro rim lighting, volumetric fog beams cutting through darkness, high-contrast cinematic glow, subtle anamorphic lens flare.
-4. 🔊 **음향 효과 (Sound Effects & SFX)**:
-   - Specific sound cues and audio ambience:
-     e.g. Sharp metallic blade unsheathing SFX, thunderous sub-bass whoosh, howling ambient wind, heavy impact sound effect.
-5. ⚡ **품질 및 물리 (Quality & Physics)**:
-   - Photorealistic 8k, fluid natural cloth physics, realistic lip sync articulation, coherent 24fps cinematic motion blur.
+[CRITICAL REQUIREMENT: COMPLETE SEPARATION OF CHARACTER DIALOGUE & NARRATION (대사와 나레이션 100% 엄격 분리)]
+🚨 WARNING: AI Video models (Kling 1.5, Runway Gen-3, Hailuo AI, Sora) will animate character lip sync for ANY text attributed to character speech.
+Therefore, characters appearing on screen MUST NEVER EVER speak the narration!
+You MUST classify each scene into one of the following 4 cases and follow the exact structure:
 
-Format of "videoPrompt" (Single unified English prompt text with Korean dialogue ready for Kling / Runway):
-[Character & Dialogue]: [Character Name and fixed appearance], speaking with expressive lip sync: "[Exact Korean Dialogue]", [Action and emotional facial expression].
-[Camera Movement]: [Specific camera movement, lens, and angle].
-[Lighting & Atmosphere]: [Specific lighting setup, shadows, and atmospheric particles].
-[Sound Effects & SFX]: [Specific audio sound effects, impacts, and ambient cues].
-[Quality & Motion]: Photorealistic 8k, realistic lip sync, fluid cloth physics, coherent 24fps cinematic motion blur.
+[CASE 1 - 나레이션만 있는 씬 (대사 없음 - 가장 흔함)]:
+- 🚨 등장인물은 입을 굳게 다문 채 절대 말하지 않음 (립싱크 금지)! 오직 시네마틱 무언의 표정 및 행동 연기만 수행.
+- 나레이션은 반드시 별도의 화면 밖 성우 보이스오버 [Voiceover Narration (Off-Screen)] 태그로만 작성할 것!
+- Format:
+  [Character & Visual Action (Non-speaking)]: [Character Name and fixed appearance], mouth closed, strictly non-speaking (no lip sync), silent intense dramatic expression, [cinematic action matching narration].
+  [Voiceover Narration (Off-Screen)]: Off-camera narrator voiceover: "[Exact Korean Narration]". (Off-screen voiceover only; character remains silent with lips closed, no lip sync).
+
+[CASE 2 - 등장인물 대사만 있는 씬 (나레이션 없음)]:
+- 화면 속 캐릭터가 직접 입을 열어 대사를 발화 (자연스러운 입모양 립싱크 동기화).
+- Format:
+  [Character Dialogue & Lip Sync]: [Speaker Name and fixed appearance], speaking with expressive lip sync: "[Exact Korean Dialogue]", mouth moving naturally in synchronization with speech, [emotional action and sharp facial expression].
+  [Voiceover Narration (Off-Screen)]: (No narration - scene driven purely by in-character dialogue).
+
+[CASE 3 - 나레이션과 등장인물 대사가 둘 다 있는 복합 씬]:
+- 🚨 절대로 나레이션을 캐릭터의 대사로 합치지 마시오! 둘을 완전히 다른 태그로 분리!
+- Format:
+  [Voiceover Narration (Off-Screen)]: Off-camera narrator voiceover: "[Exact Korean Narration]". (Background voiceover commentary).
+  [Character Dialogue & Lip Sync]: [Speaker Name and fixed appearance], speaking with expressive lip sync: "[Exact Korean Dialogue]", mouth moving naturally in synchronization with speech, [emotional action]. (Character speaks ONLY this dialogue line, NOT the narration).
+
+[CASE 4 - 대사와 나레이션 둘 다 없는 순수 비주얼/SFX 씬]:
+- Format:
+  [Character & Visual Action (Silent)]: [Character Name and fixed appearance], mouth closed, non-speaking silent performance, [cinematic action].
+  [Audio & Ambience]: Instrumental BGM and ambient SFX only (no voiceover or speech).
+
+Format of "videoPrompt" (Single unified English prompt text ready for direct copy-paste into Kling / Runway / Hailuo):
+- For Scene with Dialogue:
+  [Character Dialogue & Lip Sync]: [Character Name and fixed appearance], speaking with expressive lip sync: "[Exact Korean Dialogue]", mouth moving naturally in synchronization with speech, [Action and emotional expression].
+  (If narration also exists): [Voiceover Narration (Off-Screen)]: Off-camera narrator voiceover: "[Exact Korean Narration]". (Off-camera narrator, not spoken by character).
+  [Camera Movement]: [Specific camera movement, lens, and angle].
+  [Lighting & Atmosphere]: [Specific lighting setup, shadows, and atmospheric particles].
+  [Sound Effects & SFX]: [Specific audio sound effects, impacts, and ambient cues].
+  [Quality & Motion]: Photorealistic 8k, realistic lip sync, fluid cloth physics, coherent 24fps cinematic motion blur.
+
+- For Scene with Narration Only (NO Character Dialogue):
+  [Character & Visual Action (Non-speaking)]: [Character Name and fixed appearance], mouth closed, strictly non-speaking (no lip sync), silent dramatic performance, [Action and emotional facial expression].
+  [Voiceover Narration (Off-Screen)]: Off-camera narrator voiceover: "[Exact Korean Narration]". (Off-screen voiceover only; character remains silent with lips closed, no lip sync).
+  [Camera Movement]: [Specific camera movement, lens, and angle].
+  [Lighting & Atmosphere]: [Specific lighting setup, shadows, and atmospheric particles].
+  [Sound Effects & SFX]: [Specific audio sound effects, impacts, and ambient cues].
+  [Quality & Motion]: Photorealistic 8k, fluid cloth physics, coherent 24fps cinematic motion blur.
 
 Also provide the "videoComponents" structured breakdown for UI badges:
-- "dialogue": The exact Korean spoken line for this scene
-- "characterAction": Character action & lip sync/expression instruction
+- "speechType": "narration_only" | "dialogue_only" | "both" | "silent"
+- "narration": The exact Korean voiceover narration text (or "" if none)
+- "speaker": The name of the speaking character (or "없음" if no dialogue)
+- "dialogue": The exact Korean spoken line for this scene (or "" if none - DO NOT PUT NARRATION HERE!)
+- "characterAction": Character action & expression (explicitly specifying "mouth closed / non-speaking" if no dialogue, or "expressive lip sync" if dialogue exists)
 - "cameraMovement": Camera movement and lens description
 - "lighting": Lighting architecture and mood description
 - "soundEffects": SFX sound effects and audio ambience
@@ -2493,16 +2690,36 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
     "prompts": [
         {
             "sceneNumber": 1,
-            "sceneSummary": "씬 요약 (한국어)",
+            "sceneSummary": "어둠 속에서 검을 쥐는 주인공 (나레이션 전용 씬)",
             "charactersPresent": ["주인공 이현"],
             "imagePrompt": "[Character Fixed Anchor], [Scene Action, Camera Angle, Lighting, Background] --ar 9:16 --style raw --v 6.0",
-            "videoPrompt": "[Character & Dialogue]: Handsome East Asian swordsman in navy blue silk martial arts robe, speaking with expressive lip sync: \"네 놈의 칼날은 결코 진실을 벨 수 없다!\", looking forward with fierce resolute eyes.\\n[Camera Movement]: Rapid low-angle push-in tracking shot zooming towards his face, 35mm anamorphic lens framing.\\n[Lighting & Atmosphere]: Moody chiaroscuro rim lighting, dramatic backlight piercing through mist, volumetric smoke, high contrast.\\n[Sound Effects & SFX]: Sharp metallic sword unsheathing sound effect, thunderous sub-bass whoosh, howling ambient wind.\\n[Quality & Motion]: Photorealistic 8k, fluid cloth physics, realistic lip sync motion, coherent 24fps cinematic motion blur.",
+            "videoPrompt": "[Character & Visual Action (Non-speaking)]: Handsome East Asian swordsman in navy blue silk martial arts robe, mouth closed, strictly non-speaking (no lip sync), silent intense dramatic expression, grasping the hilt of his sword with resolute eyes.\\n[Voiceover Narration (Off-Screen)]: Off-camera narrator voiceover: \"천 년 동안 잠들어 있던 전설의 검이 마침내 깨어났다.\". (Off-screen voiceover only; character remains silent with lips closed, no lip sync).\\n[Camera Movement]: Rapid low-angle push-in tracking shot zooming towards his face, 35mm anamorphic lens framing.\\n[Lighting & Atmosphere]: Moody chiaroscuro rim lighting, dramatic backlight piercing through mist, volumetric smoke, high contrast.\\n[Sound Effects & SFX]: Sharp metallic sword unsheathing sound effect, thunderous sub-bass whoosh, howling ambient wind.\\n[Quality & Motion]: Photorealistic 8k, fluid cloth physics, coherent 24fps cinematic motion blur.",
             "videoComponents": {
-                "dialogue": "네 놈의 칼날은 결코 진실을 벨 수 없다!",
-                "characterAction": "단호한 눈빛으로 검을 쥐며 결의에 찬 표정으로 말함 (자연스러운 립싱크 및 표정 연기)",
+                "speechType": "narration_only",
+                "narration": "천 년 동안 잠들어 있던 전설의 검이 마침내 깨어났다.",
+                "speaker": "없음",
+                "dialogue": "",
+                "characterAction": "입을 굳게 다문 채(비발화/립싱크 없음) 단호한 눈빛으로 검을 쥠",
                 "cameraMovement": "Rapid low-angle push-in tracking shot (35mm 렌즈 클로즈업)",
                 "lighting": "Moody chiaroscuro rim lighting & 안개 속을 뚫고 들어오는 드라마틱한 역광",
                 "soundEffects": "Sharp metallic sword unsheathing SFX + Thunderous sub-bass whoosh"
+            }
+        },
+        {
+            "sceneNumber": 2,
+            "sceneSummary": "적을 향해 결의를 밝히는 주인공 (대사 전용 씬)",
+            "charactersPresent": ["주인공 이현"],
+            "imagePrompt": "[Character Fixed Anchor], [Scene Action, Camera Angle, Lighting, Background] --ar 9:16 --style raw --v 6.0",
+            "videoPrompt": "[Character Dialogue & Lip Sync]: Handsome East Asian swordsman in navy blue silk martial arts robe, speaking with expressive lip sync: \"네 놈의 칼날은 결코 진실을 벨 수 없다!\", mouth moving naturally in synchronization with speech, pointing his sword forward with fierce resolute eyes.\\n[Camera Movement]: Dynamic whip pan transition followed by steady eye-level medium tracking shot, 35mm lens.\\n[Lighting & Atmosphere]: High-contrast cyan and orange cinematic rim lighting, rain droplet particles reflecting neon sparks.\\n[Sound Effects & SFX]: Heavy thunder crack, electrical spark sound effect, intense drum cadence.\\n[Quality & Motion]: Photorealistic 8k, realistic lip sync motion, fluid cloth physics, coherent 24fps cinematic motion blur.",
+            "videoComponents": {
+                "speechType": "dialogue_only",
+                "narration": "",
+                "speaker": "주인공 이현",
+                "dialogue": "네 놈의 칼날은 결코 진실을 벨 수 없다!",
+                "characterAction": "결연한 표정으로 검을 겨누며 대사 발화 (자연스러운 립싱크 동기화)",
+                "cameraMovement": "Dynamic whip pan transition & steady medium tracking shot (35mm)",
+                "lighting": "High-contrast cyan & orange cinematic rim lighting with rain spark particles",
+                "soundEffects": "Heavy thunder crack + Electrical spark SFX + Intense drum cadence"
             }
         }
     ]
@@ -2511,8 +2728,8 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
 
             try {
                 const promptData = await callGemini(apiKey, prompt, true);
-                
-                // 한국어 대사, 카메라 무빙, 조명 연출, 음향효과가 누락되지 않도록 클라이언트 측 안전 보장 및 올인원 프롬프트 완성
+
+                // 한국어 대사, 나레이션 분리, 카메라 무빙, 조명 연출, 음향효과가 누락되지 않도록 클라이언트 측 안전 보장 및 올인원 프롬프트 완성
                 if (promptData.prompts && scenes && scenes.length > 0) {
                     promptData.prompts.forEach(p => {
                         const matchingScene = scenes.find(s => s.sceneNumber === p.sceneNumber);
@@ -2521,17 +2738,33 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                                 p.charactersPresent = matchingScene.charactersPresent || [];
                             }
                             const charName = (p.charactersPresent && p.charactersPresent.length > 0) ? p.charactersPresent.join(', ') : '주인공';
-                            const narrationText = matchingScene.narration || '';
+                            
+                            // 대본 원본(Ground Truth) 기준 대사 및 나레이션 엄격 분리
+                            const hasDialogue = Boolean(matchingScene.dialogue && matchingScene.dialogue.trim() !== '');
+                            const dialogueText = hasDialogue ? matchingScene.dialogue.trim() : '';
+                            const speakerName = (hasDialogue && matchingScene.speaker && matchingScene.speaker !== '없음') ? matchingScene.speaker.trim() : charName;
+                            
+                            const hasNarration = Boolean(matchingScene.narration && matchingScene.narration.trim() !== '');
+                            const narrationTextClean = hasNarration ? matchingScene.narration.trim() : '';
+                            
                             const sfxText = matchingScene.sfx || 'Fast cinematic whoosh sound effect, heavy sub-bass impact';
-                            const visualText = matchingScene.visual || 'Dynamic subject action and camera movement';
 
                             p.videoComponents = p.videoComponents || {};
-                            if (!p.videoComponents.dialogue || p.videoComponents.dialogue.trim() === '') {
-                                p.videoComponents.dialogue = narrationText;
+                            p.videoComponents.speechType = (hasDialogue && hasNarration) ? 'both' : (hasDialogue ? 'dialogue_only' : (hasNarration ? 'narration_only' : 'silent'));
+                            p.videoComponents.narration = narrationTextClean;
+                            p.videoComponents.dialogue = dialogueText;
+                            p.videoComponents.speaker = hasDialogue ? speakerName : '없음';
+
+                            // 캐릭터 액션 검증: 대사가 없는 씬인데 발화/립싱크 관련 문구가 포함된 경우 엄격 차단
+                            if (!p.videoComponents.characterAction || p.videoComponents.characterAction.trim() === '' || 
+                                (!hasDialogue && (p.videoComponents.characterAction.includes('대사') || p.videoComponents.characterAction.includes('말함') || p.videoComponents.characterAction.includes('립싱크')))) {
+                                if (hasDialogue) {
+                                    p.videoComponents.characterAction = `${speakerName} 결의에 찬 표정으로 대사 발화 (자연스러운 립싱크 동기화)`;
+                                } else {
+                                    p.videoComponents.characterAction = `${charName} 입을 굳게 다문 채(비발화/립싱크 없음) 몰입된 눈빛과 시네마틱 액션`;
+                                }
                             }
-                            if (!p.videoComponents.characterAction || p.videoComponents.characterAction.trim() === '') {
-                                p.videoComponents.characterAction = `${charName} 결의에 찬 표정으로 대사 발화 (립싱크 동기화)`;
-                            }
+
                             if (!p.videoComponents.cameraMovement || p.videoComponents.cameraMovement.trim() === '') {
                                 p.videoComponents.cameraMovement = vs.cameraMovement || 'Dynamic push-in tracking shot (35mm lens)';
                             }
@@ -2542,10 +2775,25 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                                 p.videoComponents.soundEffects = sfxText;
                             }
 
-                            // videoPrompt가 비어있거나 필수 요소가 누락된 경우 올인원 프롬프트 자동 합성
-                            if (!p.videoPrompt || !p.videoPrompt.includes('Camera Movement') || !p.videoPrompt.includes(narrationText)) {
-                                p.videoPrompt = `[Character & Dialogue]: ${charName}, speaking with expressive lip sync: "${p.videoComponents.dialogue}", ${p.videoComponents.characterAction}.\n[Camera Movement]: ${p.videoComponents.cameraMovement}, 35mm cinematic lens.\n[Lighting & Atmosphere]: ${p.videoComponents.lighting}, volumetric depth.\n[Sound Effects & SFX]: ${p.videoComponents.soundEffects}.\n[Quality & Motion]: Photorealistic 8k, fluid cloth physics, realistic lip sync motion, coherent 24fps cinematic motion blur.`;
+                            // 올인원 비디오 프롬프트 음성 및 캐릭터 연출 섹션 엄격 합성 (대사와 나레이션 100% 분리)
+                            let speechOrActionHeader = '';
+                            if (hasDialogue && hasNarration) {
+                                speechOrActionHeader = `[Voiceover Narration (Off-Screen)]: Off-camera narrator voiceover: "${narrationTextClean}". (Off-screen voiceover commentary only).\n[Character Dialogue & Lip Sync]: ${speakerName}, speaking with expressive lip sync: "${dialogueText}", mouth moving naturally in synchronization with speech, ${p.videoComponents.characterAction}. (Character speaks ONLY this dialogue line, NOT the narration).`;
+                            } else if (hasDialogue) {
+                                speechOrActionHeader = `[Character Dialogue & Lip Sync]: ${speakerName}, speaking with expressive lip sync: "${dialogueText}", mouth moving naturally in synchronization with speech, ${p.videoComponents.characterAction}.`;
+                            } else if (hasNarration) {
+                                speechOrActionHeader = `[Character & Visual Action (Non-speaking)]: ${charName}, mouth closed, strictly non-speaking (no lip sync), silent intense dramatic expression, ${p.videoComponents.characterAction}.\n[Voiceover Narration (Off-Screen)]: Off-camera narrator voiceover: "${narrationTextClean}". (Off-screen voiceover only; character remains silent with lips closed, no lip sync).`;
+                            } else {
+                                speechOrActionHeader = `[Character & Visual Action (Silent)]: ${charName}, mouth closed, non-speaking silent performance, ${p.videoComponents.characterAction}.\n[Audio & Ambience]: Instrumental BGM and ambient SFX only (No speech or voiceover).`;
                             }
+
+                            const cameraPart = `[Camera Movement]: ${p.videoComponents.cameraMovement}, 35mm cinematic lens.`;
+                            const lightingPart = `[Lighting & Atmosphere]: ${p.videoComponents.lighting}, volumetric depth.`;
+                            const soundPart = `[Sound Effects & SFX]: ${p.videoComponents.soundEffects}.`;
+                            const qualityPart = `[Quality & Motion]: Photorealistic 8k, fluid cloth physics, coherent 24fps cinematic motion blur.`;
+
+                            // 항상 안전하게 합성된 비디오 프롬프트 적용
+                            p.videoPrompt = `${speechOrActionHeader}\n${cameraPart}\n${lightingPart}\n${soundPart}\n${qualityPart}`;
                         }
                     });
                 }
@@ -2554,7 +2802,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                 promptState.characterMasterSheet = promptData.characterMasterSheet || [];
                 promptState.bgmPrompt = promptData.bgmPrompt || null;
                 renderPrompts(promptData);
-            } catch(e) {
+            } catch (e) {
                 console.error(e);
                 alert(`프롬프트 생성 중 오류: ${e.message}`);
                 document.getElementById('prompts-loading').style.display = 'none';
@@ -2568,7 +2816,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                 btn.textContent = 'Copied!';
                 btn.style.borderColor = 'var(--success)';
                 btn.style.color = 'var(--success)';
-                setTimeout(() => { 
+                setTimeout(() => {
                     btn.textContent = orig;
                     btn.style.borderColor = '';
                     btn.style.color = '';
@@ -2585,7 +2833,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
             // 1. 등장인물 얼굴 & 복장 100% 일관성 마스터 카드 (Midjourney Turnaround & --cref)
             const charContainer = document.getElementById('character-consistency-container');
             const masterSheet = promptData.characterMasterSheet || promptState.characterMasterSheet || [];
-            
+
             if (charContainer) {
                 if (masterSheet && masterSheet.length > 0) {
                     charContainer.innerHTML = `
@@ -2620,7 +2868,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                                 <div style="background:var(--bg-surface); border:1px solid var(--border-light); border-radius:8px; padding:16px;">
                                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
                                         <div style="display:flex; align-items:center; gap:8px;">
-                                            <span style="font-size:15px; font-weight:800; color:var(--primary);">${char.name || `인물 ${idx+1}`}</span>
+                                            <span style="font-size:15px; font-weight:800; color:var(--primary);">${char.name || `인물 ${idx + 1}`}</span>
                                             <span style="font-size:10px; font-weight:700; background:#e0e7ff; color:#4338ca; padding:2px 8px; border-radius:4px;">${char.role || '등장인물'}</span>
                                         </div>
                                         <span style="font-size:12px; color:var(--text-secondary); font-weight:600;">${char.koreanSummary || ''}</span>
@@ -2656,7 +2904,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                     charContainer.innerHTML = '';
                 }
             }
-            
+
             // 2. Master BGM Prompt 카드
             const bgmContainer = document.getElementById('bgm-prompt-container');
             const bgm = promptData.bgmPrompt;
@@ -2733,7 +2981,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                         <div style="font-size:12px; font-family:monospace; background:var(--bg-surface); border:1px solid var(--border-light); padding:10px 12px; border-radius:6px; line-height:1.5; color:var(--text-primary); word-break:break-word;">${p.imagePrompt}</div>
                     </div>
 
-                    <!-- 2. 올인원 AI 비디오 원클릭 생성 프롬프트 (카메라+조명+음향SFX+대사/나레이션 립싱크) -->
+                    <!-- 2. 올인원 AI 비디오 원클릭 생성 프롬프트 (카메라+조명+음향SFX+성우VO/인물대사 완벽 분리) -->
                     <div style="background:var(--bg-surface); border:1.5px solid #10b981; border-radius:10px; padding:16px; box-shadow: 0 3px 14px rgba(16, 185, 129, 0.09);">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
                             <div style="display:flex; align-items:center; gap:8px;">
@@ -2741,34 +2989,73 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                                     🎥 ALL-IN-ONE AI VIDEO DIRECT PROMPT
                                 </span>
                                 <span style="font-size:11px; color:var(--text-secondary); font-weight:600;">
-                                    (카메라 무빙 + 조명 연출 + 음향SFX + 나레이션/대사 립싱크 100% 통합)
+                                    (카메라 무빙 + 조명 연출 + 음향SFX + 성우VO/인물대사 완벽 분리 통합)
                                 </span>
                             </div>
                             <div style="display:flex; gap:6px; flex-wrap:wrap;">
                                 <button class="btn-primary" style="padding:6px 14px; font-size:11px; font-weight:700; background:#059669; border-color:#059669; display:flex; align-items:center; gap:5px;" onclick="copyText(this)" data-copy="${(p.videoPrompt || '').replace(/"/g, '&quot;')}">
                                     📋 비디오 원클릭 생성 프롬프트 복사
                                 </button>
-                                <button class="btn-secondary" style="padding:5px 10px; font-size:11px;" onclick="copyText(this)" data-copy="${(vc.dialogue || '').replace(/"/g, '&quot;')}">
-                                    🎙️ 대사/나레이션만 복사
-                                </button>
+                                ${(vc.dialogue && vc.dialogue.trim()) ? `
+                                    <button class="btn-secondary" style="padding:5px 10px; font-size:11px; color:#059669; border-color:#059669;" onclick="copyText(this)" data-copy="${(vc.dialogue || '').replace(/"/g, '&quot;')}">
+                                        💬 인물 대사만 복사 (${vc.speaker || '등장인물'})
+                                    </button>
+                                ` : ''}
+                                ${(vc.narration && vc.narration.trim()) ? `
+                                    <button class="btn-secondary" style="padding:5px 10px; font-size:11px; color:#6366f1; border-color:#6366f1;" onclick="copyText(this)" data-copy="${(vc.narration || '').replace(/"/g, '&quot;')}">
+                                        🎙️ 성우 나레이션만 복사
+                                    </button>
+                                ` : ''}
                             </div>
                         </div>
 
-                        <!-- 5대 연출 요소 브레이크다운 배지 그리드 -->
+                        <!-- 연출 요소 브레이크다운 배지 그리드 (대사와 나레이션 명확 분리) -->
                         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap:8px; margin-bottom:12px;">
-                            <div style="background:var(--bg-main); border:1px solid var(--border-light); border-radius:6px; padding:8px 10px;">
-                                <div style="font-size:10px; font-weight:800; color:var(--primary); margin-bottom:2px;">🎙️ 대사 & 립싱크 (Dialogue)</div>
-                                <div style="font-size:11px; font-weight:700; color:var(--text-primary); line-height:1.4;">"${vc.dialogue || ''}"</div>
-                                <div style="font-size:10px; color:var(--text-secondary); margin-top:2px;">🗣️ ${vc.characterAction || '자연스러운 발화 립싱크'}</div>
+                            <!-- 1. 성우 나레이션 카드 -->
+                            <div style="background:var(--bg-main); border:1px solid var(--border-light); border-left:3px solid #6366f1; border-radius:6px; padding:8px 10px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                                    <span style="font-size:10px; font-weight:800; color:#6366f1; display:flex; align-items:center; gap:4px;">
+                                        🎙️ 성우 나레이션 (보이스오버)
+                                    </span>
+                                    <span style="font-size:9px; font-weight:700; background:#e0e7ff; color:#4338ca; padding:1px 5px; border-radius:3px;">
+                                        ${vc.narration ? '📢 화면 밖 해설' : '해설 없음'}
+                                    </span>
+                                </div>
+                                <div style="font-size:11px; font-weight:700; color:var(--text-primary); line-height:1.4;">
+                                    ${vc.narration ? `"${vc.narration}"` : '<span style="color:var(--text-secondary); font-style:italic;">(나레이션 없음)</span>'}
+                                </div>
+                                <div style="font-size:10px; color:#6366f1; margin-top:2px;">
+                                    ${vc.narration ? '🚫 등장인물 립싱크 금지 (화면 밖 3인칭 VO)' : '비해설 씬'}
+                                </div>
                             </div>
+
+                            <!-- 2. 등장인물 대사 카드 -->
+                            <div style="background:var(--bg-main); border:1px solid var(--border-light); border-left:3px solid #059669; border-radius:6px; padding:8px 10px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                                    <span style="font-size:10px; font-weight:800; color:#059669; display:flex; align-items:center; gap:4px;">
+                                        💬 등장인물 대사 (립싱크)
+                                    </span>
+                                    ${vc.dialogue ? `<span style="font-size:9px; font-weight:700; background:#d1fae5; color:#065f46; padding:1px 5px; border-radius:3px;">👤 ${vc.speaker || '등장인물'}</span>` : `<span style="font-size:9px; color:var(--text-secondary);">인물 발화 없음</span>`}
+                                </div>
+                                <div style="font-size:11px; font-weight:700; color:${vc.dialogue ? '#047857' : 'var(--text-secondary)'}; line-height:1.4;">
+                                    ${vc.dialogue ? `"${vc.dialogue}"` : '<span style="font-style:italic;">(대사 없음 - 인물 입모양 립싱크 없음)</span>'}
+                                </div>
+                                <div style="font-size:10px; color:var(--text-secondary); margin-top:2px;">🗣️ ${vc.characterAction || '시네마틱 연출'}</div>
+                            </div>
+
+                            <!-- 3. 카메라 무빙 -->
                             <div style="background:var(--bg-main); border:1px solid var(--border-light); border-radius:6px; padding:8px 10px;">
                                 <div style="font-size:10px; font-weight:800; color:#0284c7; margin-bottom:2px;">🎥 카메라 무빙 & 화각 (Camera)</div>
                                 <div style="font-size:11px; color:var(--text-primary); line-height:1.4;">${vc.cameraMovement || 'Dynamic push-in tracking shot, 35mm'}</div>
                             </div>
+
+                            <!-- 4. 조명 & 무드 -->
                             <div style="background:var(--bg-main); border:1px solid var(--border-light); border-radius:6px; padding:8px 10px;">
                                 <div style="font-size:10px; font-weight:800; color:#d97706; margin-bottom:2px;">💡 조명 & 무드 (Lighting)</div>
                                 <div style="font-size:11px; color:var(--text-primary); line-height:1.4;">${vc.lighting || 'Moody chiaroscuro rim light'}</div>
                             </div>
+
+                            <!-- 5. 음향 효과 -->
                             <div style="background:var(--bg-main); border:1px solid var(--border-light); border-radius:6px; padding:8px 10px;">
                                 <div style="font-size:10px; font-weight:800; color:#dc2626; margin-bottom:2px;">🔊 음향 효과 (SFX & Audio)</div>
                                 <div style="font-size:11px; color:var(--text-primary); line-height:1.4;">${vc.soundEffects || 'Fast Whoosh + Sub Bass Drop'}</div>
@@ -2779,7 +3066,9 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                         <div style="position:relative;">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; flex-wrap:wrap; gap:4px;">
                                 <span style="font-size:10px; font-weight:800; color:var(--text-secondary);">🚀 복사하여 Kling AI / Runway / Hailuo / Luma에 붙여넣기만 하면 영상이 즉시 생성되는 프롬프트:</span>
-                                <span style="font-size:10px; font-weight:700; color:#059669;">Kling 1.5 • Runway Gen-3 • Hailuo AI • Luma</span>
+                                <span style="font-size:10px; font-weight:700; color:#059669;">
+                                    ${vc.dialogue ? '💬 인물 대사 립싱크 적용' : '🤐 인물 무발화(립싱크 방지) & 성우 VO 적용'}
+                                </span>
                             </div>
                             <div style="font-size:12px; font-family:monospace; background:var(--bg-main); border:1px solid var(--border-light); padding:10px 12px; border-radius:6px; line-height:1.6; color:var(--text-primary); word-break:break-word; white-space:pre-wrap;">${p.videoPrompt}</div>
                         </div>
@@ -2822,7 +3111,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
             // 1. 분석 결과
             if (analysis) {
                 md += `## 1. 📊 바이럴 성공 요인 심층 분석 (Reverse Engineering)\n\n`;
-                
+
                 if (analysis.viralMechanisms && analysis.viralMechanisms.length > 0) {
                     md += `### 🎯 11대 핵심 바이럴 성공 메커니즘\n\n`;
                     analysis.viralMechanisms.forEach((m, idx) => {
@@ -2891,9 +3180,11 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                 script.forEach(s => {
                     const charTag = (s.charactersPresent && s.charactersPresent.length > 0) ? ` [👤 ${s.charactersPresent.join(', ')}]` : '';
                     md += `### SCENE ${s.sceneNumber} (${s.time})${charTag}\n`;
-                    md += `- **🎙️ 대사 (Narration - 1문장):** ${s.narration}\n`;
+                    if (s.narration) md += `- **🎙️ 나레이션 (Voiceover):** ${s.narration}\n`;
+                    if (s.dialogue) md += `- **💬 등장인물 대사 (Dialogue):** [${s.speaker || '등장인물'}] "${s.dialogue}"\n`;
+                    if (!s.narration && !s.dialogue) md += `- **🎙️ 음성:** (대사/나레이션 없음 - 비주얼 연출 중심)\n`;
                     md += `- **🎬 화면 연출 (Visual):** ${s.visual}\n`;
-                    if (s.caption || s.narration) md += `- **📝 화면 자막 (대사/나레이션):** "${s.caption || s.narration}"\n`;
+                    if (s.caption) md += `- **📝 화면 자막 (Caption):** "${s.caption}"\n`;
                     if (s.sfx) md += `- **🎵 사운드/효과음 (SFX):** ${s.sfx}\n`;
                     md += `\n`;
                 });
@@ -2950,9 +3241,19 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                     md += `### SCENE ${p.sceneNumber} ${p.sceneSummary ? `(${p.sceneSummary})` : ''}${charTag}\n\n`;
                     md += `#### 🖼️ Midjourney v6 Image Prompt (9:16)\n`;
                     md += `\`\`\`text\n${p.imagePrompt}\n\`\`\`\n\n`;
-                    
+
                     md += `#### 🎬 AI 비디오 5대 핵심 연출 가이드\n`;
-                    if (vc.dialogue) md += `- **🎙️ 대사/나레이션 (립싱크):** "${vc.dialogue}" (${vc.characterAction || '자연스러운 립싱크'})\n`;
+                    if (vc.narration) {
+                        md += `- **🎙️ 성우 나레이션 (보이스오버):** "${vc.narration}" *(화면 밖 3인칭 해설 / 등장인물 입모양 발화 절대 금지)*\n`;
+                    } else {
+                        md += `- **🎙️ 성우 나레이션:** *(나레이션 없음 - 인물 대사 및 영상 중심)*\n`;
+                    }
+                    if (vc.dialogue) {
+                        md += `- **💬 등장인물 대사 (립싱크):** [${vc.speaker || '등장인물'}] "${vc.dialogue}" *(화면 속 인물 직접 발화 및 립싱크 동기화)*\n`;
+                    } else {
+                        md += `- **💬 등장인물 대사:** *(대사 없음 - 인물 입을 굳게 다문 채 무발화 시네마틱 연기)*\n`;
+                    }
+                    md += `- **👤 인물 연출 & 연기:** ${vc.characterAction || '시네마틱 표정 및 행동 연기'}\n`;
                     if (vc.cameraMovement) md += `- **🎥 카메라 무빙 & 화각:** ${vc.cameraMovement}\n`;
                     if (vc.lighting) md += `- **💡 조명 & 대기 연출:** ${vc.lighting}\n`;
                     if (vc.soundEffects) md += `- **🔊 음향 효과 (SFX):** ${vc.soundEffects}\n`;
@@ -2990,11 +3291,11 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
         // --- Create New Project (새로 만들기) Logic ---
         function createNewProject(force = false) {
             const hasWork = (searchState.allResults && searchState.allResults.length > 0) ||
-                            (analyzeState && analyzeState.analysisResult !== null) ||
-                            (ideationState && ideationState.ideas && ideationState.ideas.length > 0) ||
-                            (scriptState && scriptState.script !== null) ||
-                            (promptState && promptState.prompts && promptState.prompts.length > 0) ||
-                            (inputSearchQuery && inputSearchQuery.value.trim() !== '');
+                (analyzeState && analyzeState.analysisResult !== null) ||
+                (ideationState && ideationState.ideas && ideationState.ideas.length > 0) ||
+                (scriptState && scriptState.script !== null) ||
+                (promptState && promptState.prompts && promptState.prompts.length > 0) ||
+                (inputSearchQuery && inputSearchQuery.value.trim() !== '');
 
             if (!force && hasWork) {
                 const confirmed = confirm('✨ 새 프로젝트를 시작하시겠습니까?\n\n현재 화면의 검색 결과, 분석 리포트, 아이디어, 대본 작업 내용이 모두 초기화됩니다.\n(저장된 YouTube / Gemini API 키는 안전하게 유지됩니다.)');
@@ -3106,7 +3407,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
 
         // 단축키: Alt + N 또는 Ctrl + Shift + N 으로 새로 만들기
         window.addEventListener('keydown', (e) => {
-            if ((e.altKey && e.key.toLowerCase() === 'n') || 
+            if ((e.altKey && e.key.toLowerCase() === 'n') ||
                 ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'n')) {
                 e.preventDefault();
                 createNewProject();
@@ -3199,11 +3500,11 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
             try {
                 // 작업 내용이 전혀 없는 빈 프로젝트면 저장하지 않음
                 const hasWork = (searchState.allResults && searchState.allResults.length > 0) ||
-                                (analyzeState && analyzeState.analysisResult !== null) ||
-                                (ideationState && ideationState.ideas && ideationState.ideas.length > 0) ||
-                                (scriptState && scriptState.script !== null) ||
-                                (promptState && promptState.prompts && promptState.prompts.length > 0) ||
-                                (inputSearchQuery && inputSearchQuery.value.trim() !== '');
+                    (analyzeState && analyzeState.analysisResult !== null) ||
+                    (ideationState && ideationState.ideas && ideationState.ideas.length > 0) ||
+                    (scriptState && scriptState.script !== null) ||
+                    (promptState && promptState.prompts && promptState.prompts.length > 0) ||
+                    (inputSearchQuery && inputSearchQuery.value.trim() !== '');
 
                 if (!hasWork) {
                     updateAutosaveIndicator('cleared');
@@ -3465,4 +3766,5 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
 
     </script>
 </body>
+
 </html>
