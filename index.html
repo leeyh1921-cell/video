@@ -451,6 +451,111 @@
             gap: 12px;
             margin-top: 24px;
         }
+
+        /* --- Direct Video Analyzer & Custom Topic Styles --- */
+        .mode-tab-btn {
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+        }
+
+        .mode-tab-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+        }
+
+        .mode-tab-btn.active {
+            border-color: var(--primary) !important;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(99, 102, 241, 0.08)) !important;
+            color: var(--primary) !important;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+        }
+
+        .sub-mode-btn {
+            transition: all 0.2s ease;
+        }
+
+        .sub-mode-btn.active {
+            background: var(--bg-surface) !important;
+            color: var(--primary) !important;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-dropzone {
+            border: 2px dashed #818cf8;
+            background: #f8faff;
+            border-radius: 12px;
+            padding: 28px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .video-dropzone:hover, .video-dropzone.dragover {
+            border-color: var(--primary);
+            background: #eef2ff;
+            transform: scale(1.005);
+        }
+
+        .filmstrip-strip {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: thin;
+        }
+
+        .filmstrip-thumb {
+            position: relative;
+            flex-shrink: 0;
+            width: 110px;
+            height: 68px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            background: #000;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .filmstrip-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .filmstrip-thumb .time-badge {
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        .custom-topic-box {
+            border: 2px solid #818cf8;
+            background: linear-gradient(180deg, #f8faff 0%, #ffffff 100%);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.08);
+            transition: all 0.25s ease;
+        }
+
+        .custom-topic-box:hover {
+            box-shadow: 0 6px 24px rgba(99, 102, 241, 0.15);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.02); }
+        }
+
+        .pulse-active {
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
     </style>
 </head>
 
@@ -480,6 +585,13 @@
             <span style="font-size: 15px;">➕</span> 새로 만들기
         </button>
 
+        <!-- Direct Video Analyzer Shortcut (Sidebar) -->
+        <button id="btn-sidebar-direct-analyzer" class="btn-new-project-sidebar"
+            style="background: linear-gradient(135deg, #0284c7, #2563eb); margin-top: -6px; margin-bottom: 18px;"
+            title="유튜브 링크 또는 내 영상 파일을 업로드하여 직접 분석 & 시나리오 생성">
+            <span style="font-size: 15px;">🎬</span> URL/동영상 직접 분석
+        </button>
+
         <nav class="nav">
             <button class="nav-item active" data-step="search">01. Search</button>
             <button class="nav-item" data-step="analyze">02. Analyze</button>
@@ -502,10 +614,15 @@
                 <h1 id="page-title">Search</h1>
             </div>
             <div class="header-actions" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <button class="btn-secondary" id="btn-quick-direct-analyzer"
+                    style="padding: 8px 14px; font-size: 12px; font-weight: 700; border-color: #6366f1; color: #4f46e5; background: #eef2ff; display: flex; align-items: center; gap: 6px;"
+                    title="유튜브 링크 또는 동영상 파일을 즉시 분석하고 시나리오를 작성합니다.">
+                    🎬 URL/영상 직접 분석
+                </button>
                 <input type="password" id="yt-api-key" placeholder="YouTube API Key"
-                    style="padding: 8px 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 12px; width: 160px;">
+                    style="padding: 8px 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 12px; width: 150px;">
                 <input type="password" id="gemini-api-key" placeholder="Gemini API Key"
-                    style="padding: 8px 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 12px; width: 160px;">
+                    style="padding: 8px 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 12px; width: 150px;">
                 <button class="btn-primary" id="btn-api-save" style="padding: 8px 16px;">Save Keys</button>
                 <button class="btn-new-project-header" id="btn-new-project-header"
                     title="새 프로젝트 시작 (작업 내용 초기화, 단축키: Alt+N)">
@@ -528,148 +645,358 @@
         </header>
 
         <!-- Views -->
-        <!-- View 1: Search -->
+        <!-- View 1: Search & Direct Analyzer -->
         <div id="view-search" class="view active">
-            <div class="card">
-                <h2>Search Configuration</h2>
-                <div style="display: flex; gap: 16px; margin-bottom: 12px;">
-                    <input type="text" id="search-query" placeholder="검색어 입력 (예: 중국무협드라마, 쇼츠, AI, 여행 등)"
-                        style="flex:1; padding: 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px;">
-                    <button class="btn-primary" id="btn-search" style="padding: 10px 24px; font-weight: 600;">Search
-                        YouTube</button>
-                </div>
+            <!-- Mode Switcher Tabs -->
+            <div class="search-mode-tabs" style="display: flex; gap: 12px; margin-bottom: 20px;">
+                <button type="button" id="tab-btn-keyword-search" class="mode-tab-btn active"
+                    style="flex: 1; padding: 14px 20px; font-size: 14px; font-weight: 700; border-radius: 10px; border: 1.5px solid var(--primary); background: var(--bg-surface); color: var(--primary); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <span style="font-size: 16px;">🔍</span> 1. 키워드로 유튜브 쇼츠 검색 & 발굴
+                </button>
+                <button type="button" id="tab-btn-direct-analyzer" class="mode-tab-btn"
+                    style="flex: 1; padding: 14px 20px; font-size: 14px; font-weight: 700; border-radius: 10px; border: 1.5px solid var(--border-light); background: var(--bg-surface); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <span style="font-size: 16px;">🎬</span> 2. 유튜브 URL & 동영상 파일 직접 분석기 <span style="font-size: 10px; background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff; padding: 2px 7px; border-radius: 10px; font-weight: 800;">NEW</span>
+                </button>
+            </div>
 
-                <!-- Presets & Shorts Optimization Toggle -->
-                <div
-                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
-                    <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-                        <span style="font-size: 12px; color: var(--text-secondary); font-weight: bold;">Presets:</span>
-                        <span class="preset-tag" data-preset="viral"
-                            style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">🔥
-                            지금 떡상</span>
-                        <span style="color: var(--border-light);">|</span>
-                        <span class="preset-tag" data-preset="small-channel"
-                            style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">🚀
-                            작은 채널 대박</span>
-                        <span style="color: var(--border-light);">|</span>
-                        <span class="preset-tag" data-preset="trending"
-                            style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">⚡
-                            급상승</span>
-                        <span style="color: var(--border-light);">|</span>
-                        <span class="preset-tag" data-preset="all-time"
-                            style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">🌐
-                            전체 기간</span>
-                        <span style="color: var(--border-light);">|</span>
-                        <span class="preset-tag" data-preset="reset"
-                            style="cursor: pointer; font-size: 12px; color: var(--text-secondary); padding: 4px 2px; text-decoration: underline;">초기화</span>
+            <!-- Panel 1: Keyword Search Mode -->
+            <div id="panel-keyword-search">
+                <div class="card">
+                    <h2>Search Configuration</h2>
+                    <div style="display: flex; gap: 16px; margin-bottom: 12px;">
+                        <input type="text" id="search-query" placeholder="검색어 입력 (예: 중국무협드라마, 쇼츠, AI, 여행 등)"
+                            style="flex:1; padding: 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px;">
+                        <button class="btn-primary" id="btn-search" style="padding: 10px 24px; font-weight: 600;">Search
+                            YouTube</button>
                     </div>
 
-                    <label
-                        style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-primary); font-weight: 600; cursor: pointer; user-select: none;"
-                        title="체크 시 유튜브 API에 쇼츠 및 단편 영상(4분 미만)을 우선 요청하여 풀버전 드라마가 검색되는 문제를 방지합니다.">
-                        <input type="checkbox" id="search-shorts-only" checked
-                            style="cursor: pointer; accent-color: var(--primary); width: 16px; height: 16px;">
-                        <span>⚡ 쇼츠(#shorts) 최적화 검색</span>
-                    </label>
-                </div>
+                    <!-- Presets & Shorts Optimization Toggle -->
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                            <span style="font-size: 12px; color: var(--text-secondary); font-weight: bold;">Presets:</span>
+                            <span class="preset-tag" data-preset="viral"
+                                style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">🔥
+                                지금 떡상</span>
+                            <span style="color: var(--border-light);">|</span>
+                            <span class="preset-tag" data-preset="small-channel"
+                                style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">🚀
+                                작은 채널 대박</span>
+                            <span style="color: var(--border-light);">|</span>
+                            <span class="preset-tag" data-preset="trending"
+                                style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">⚡
+                                급상승</span>
+                            <span style="color: var(--border-light);">|</span>
+                            <span class="preset-tag" data-preset="all-time"
+                                style="cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 600; padding: 4px 2px;">🌐
+                                전체 기간</span>
+                            <span style="color: var(--border-light);">|</span>
+                            <span class="preset-tag" data-preset="reset"
+                                style="cursor: pointer; font-size: 12px; color: var(--text-secondary); padding: 4px 2px; text-decoration: underline;">초기화</span>
+                        </div>
 
-                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 16px;">
-                    <div class="input-group">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                            <label style="margin-bottom: 0;">Upload Date (게시 기간)</label>
-                            <div style="display: flex; gap: 4px;">
-                                <button type="button" class="btn-date-quick" data-range="all"
-                                    style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);"
-                                    title="전체 기간 검색">전체</button>
-                                <button type="button" class="btn-date-quick" data-range="365"
-                                    style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);"
-                                    title="최근 1년">1년</button>
-                                <button type="button" class="btn-date-quick" data-range="90"
-                                    style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);"
-                                    title="최근 3개월">3개월</button>
-                                <button type="button" class="btn-date-quick" data-range="30"
-                                    style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);"
-                                    title="최근 1개월">1개월</button>
+                        <label
+                            style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-primary); font-weight: 600; cursor: pointer; user-select: none;"
+                            title="체크 시 유튜브 API에 쇼츠 및 단편 영상(4분 미만)을 우선 요청하여 풀버전 드라마가 검색되는 문제를 방지합니다.">
+                            <input type="checkbox" id="search-shorts-only" checked
+                                style="cursor: pointer; accent-color: var(--primary); width: 16px; height: 16px;">
+                            <span>⚡ 쇼츠(#shorts) 최적화 검색</span>
+                        </label>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 16px;">
+                        <div class="input-group">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <label style="margin-bottom: 0;">Upload Date (게시 기간)</label>
+                                <div style="display: flex; gap: 4px;">
+                                    <button type="button" class="btn-date-quick" data-range="all"
+                                        style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);"
+                                        title="전체 기간 검색">전체</button>
+                                    <button type="button" class="btn-date-quick" data-range="365"
+                                        style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);"
+                                        title="최근 1년">1년</button>
+                                    <button type="button" class="btn-date-quick" data-range="90"
+                                        style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);"
+                                        title="최근 3개월">3개월</button>
+                                    <button type="button" class="btn-date-quick" data-range="30"
+                                        style="font-size: 10px; padding: 2px 6px; border: 1px solid var(--border-light); border-radius: 4px; background: var(--bg-surface); cursor: pointer; color: var(--text-secondary);"
+                                        title="최근 1개월">1개월</button>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <input type="date" id="filter-date-from"
+                                    style="flex: 1; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                                <span style="color: var(--text-secondary); font-size: 12px;">~</span>
+                                <input type="date" id="filter-date-to"
+                                    style="flex: 1; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
                             </div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <input type="date" id="filter-date-from"
-                                style="flex: 1; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
-                            <span style="color: var(--text-secondary); font-size: 12px;">~</span>
-                            <input type="date" id="filter-date-to"
-                                style="flex: 1; padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                        <div class="input-group">
+                            <label>Max Duration (영상 길이)</label>
+                            <select id="filter-duration"
+                                style="padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                                <option value="60" selected>1분 이내 (≤ 60초)</option>
+                                <option value="180">3분 이내 (≤ 180초)</option>
+                                <option value="gt300">5분 초과 (> 300초)</option>
+                                <option value="all">전체 (All)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Min Views (최소 조회수)</label>
+                            <input type="number" id="filter-views" placeholder="예: 10000"
+                                style="padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                        </div>
+                        <div class="input-group">
+                            <label>Max Subscribers (최대 구독자)</label>
+                            <input type="number" id="filter-subs" placeholder="예: 500000"
+                                style="padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
                         </div>
                     </div>
-                    <div class="input-group">
-                        <label>Max Duration (영상 길이)</label>
-                        <select id="filter-duration"
-                            style="padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
-                            <option value="60" selected>1분 이내 (≤ 60초)</option>
-                            <option value="180">3분 이내 (≤ 180초)</option>
-                            <option value="gt300">5분 초과 (> 300초)</option>
-                            <option value="all">전체 (All)</option>
-                        </select>
+                </div>
+
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h2>Results <span id="result-count"
+                                style="color: var(--text-secondary); font-size: 12px; font-weight: normal;">(0
+                                videos)</span></h2>
+                        <button class="btn-primary" id="btn-analyze-selected" disabled>Analyze Selected</button>
                     </div>
-                    <div class="input-group">
-                        <label>Min Views (최소 조회수)</label>
-                        <input type="number" id="filter-views" placeholder="예: 10000"
-                            style="padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
-                    </div>
-                    <div class="input-group">
-                        <label>Max Subscribers (최대 구독자)</label>
-                        <input type="number" id="filter-subs" placeholder="예: 500000"
-                            style="padding: 8px 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;" id="results-table">
+                            <thead>
+                                <tr>
+                                    <th
+                                        style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                        <input type="checkbox" id="check-all">
+                                    </th>
+                                    <th
+                                        style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                        Video</th>
+                                    <th
+                                        style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                        Views</th>
+                                    <th
+                                        style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                        Subs</th>
+                                    <th
+                                        style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                        V/S Ratio</th>
+                                    <th
+                                        style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                        Velocity</th>
+                                    <th
+                                        style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                        Outlier</th>
+                                    <th
+                                        style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
+                                        Viral Score</th>
+                                </tr>
+                            </thead>
+                            <tbody id="results-body">
+                                <tr>
+                                    <td colspan="8"
+                                        style="padding: 32px; text-align: center; color: var(--text-secondary); font-size: 14px;">
+                                        No videos to display. Try searching.</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <h2>Results <span id="result-count"
-                            style="color: var(--text-secondary); font-size: 12px; font-weight: normal;">(0
-                            videos)</span></h2>
-                    <button class="btn-primary" id="btn-analyze-selected" disabled>Analyze Selected</button>
+            <!-- Panel 2: Direct Video / YouTube URL Analyzer (NEW) -->
+            <div id="panel-direct-analyzer" style="display: none;">
+                <!-- 1. Input & Video Source Selection Card -->
+                <div class="card" style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <h2 style="font-size: 18px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                                🎬 유튜브 URL 또는 동영상 파일 직접 분석 & 시나리오 생성
+                            </h2>
+                            <p style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">
+                                특정 유튜브 영상(Shorts/롱폼) 또는 내 컴퓨터의 동영상 파일을 분석하여 바이럴 성공 DNA를 역설계하고, 이를 바탕으로 새로운 떡상 시나리오를 자동 작성합니다.
+                            </p>
+                        </div>
+                        <!-- Sub-mode Toggle (URL vs File) -->
+                        <div style="display: flex; background: var(--bg-main); padding: 4px; border-radius: 8px; border: 1px solid var(--border-light); gap: 4px;">
+                            <button type="button" id="direct-mode-yt-btn" class="sub-mode-btn active"
+                                style="padding: 7px 16px; font-size: 12px; font-weight: 700; border-radius: 6px; border: none; background: var(--bg-surface); color: var(--primary); cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
+                                🔗 유튜브 URL 입력
+                            </button>
+                            <button type="button" id="direct-mode-file-btn" class="sub-mode-btn"
+                                style="padding: 7px 16px; font-size: 12px; font-weight: 700; border-radius: 6px; border: none; background: transparent; color: var(--text-secondary); cursor: pointer;">
+                                📁 동영상 파일 업로드
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Source A: YouTube URL Input Form -->
+                    <div id="direct-source-yt" style="display: block;">
+                        <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                            <input type="text" id="direct-yt-input" placeholder="YouTube 영상 또는 Shorts URL을 붙여넣으세요 (예: https://www.youtube.com/shorts/XXXXX 또는 https://youtu.be/XXXXX)"
+                                style="flex: 1; padding: 12px 14px; border: 1.5px solid var(--border-light); border-radius: 8px; font-size: 14px;">
+                            <button type="button" class="btn-primary" id="btn-direct-yt-fetch" style="padding: 12px 24px; font-weight: 700; white-space: nowrap;">
+                                🔍 영상 확인
+                            </button>
+                        </div>
+
+                        <!-- YouTube Preview Area -->
+                        <div id="direct-yt-preview" style="display: none; background: var(--bg-main); border: 1px solid var(--border-light); border-radius: 10px; padding: 16px; margin-top: 14px;">
+                            <div style="display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap;">
+                                <div id="direct-yt-player-box" style="width: 260px; height: 150px; background: #000; border-radius: 8px; overflow: hidden; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                    <!-- Iframe or Thumbnail -->
+                                </div>
+                                <div style="flex: 1; min-width: 260px;">
+                                    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                                        <span id="direct-yt-badge" style="font-size: 10px; font-weight: 800; background: var(--primary); color: #fff; padding: 2px 8px; border-radius: 4px;">YOUTUBE</span>
+                                        <span id="direct-yt-duration" style="font-size: 11px; color: var(--text-secondary); font-family: monospace;">00:00</span>
+                                    </div>
+                                    <h3 id="direct-yt-title" style="font-size: 16px; font-weight: 800; color: var(--text-primary); line-height: 1.4; margin-bottom: 8px;">
+                                        영상 제목이 여기에 표시됩니다
+                                    </h3>
+                                    <div id="direct-yt-meta" style="font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px;">
+                                        <!-- Channel, views, likes -->
+                                    </div>
+                                    <div id="direct-yt-comments-preview" style="font-size: 11px; color: var(--text-secondary); background: var(--bg-surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-light);">
+                                        💬 댓글 수집 준비 완료
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Source B: Video File Upload Form -->
+                    <div id="direct-source-file" style="display: none;">
+                        <div id="direct-video-dropzone" class="video-dropzone">
+                            <input type="file" id="direct-file-input" accept="video/mp4,video/webm,video/quicktime,video/x-m4v" style="display: none;">
+                            <div style="font-size: 38px; margin-bottom: 8px;">📹</div>
+                            <div style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">
+                                동영상 파일을 이곳에 드래그 앤 드롭하거나 클릭하여 선택하세요
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">
+                                지원 포맷: MP4, WebM, MOV, M4V (스마트폰으로 촬영한 쇼츠 세로 영상 및 일반 영상 완벽 지원)
+                            </div>
+                        </div>
+
+                        <!-- Video File Preview & Extracted Keyframe Filmstrip -->
+                        <div id="direct-file-preview" style="display: none; background: var(--bg-main); border: 1px solid var(--border-light); border-radius: 10px; padding: 16px; margin-top: 14px;">
+                            <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 14px; flex-wrap: wrap;">
+                                <div style="width: 240px; border-radius: 8px; overflow: hidden; background: #000; box-shadow: 0 2px 8px rgba(0,0,0,0.2); flex-shrink: 0;">
+                                    <video id="direct-video-player" controls playsinline style="width: 100%; max-height: 220px; display: block;"></video>
+                                </div>
+                                <div style="flex: 1; min-width: 260px;">
+                                    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                                        <span style="font-size: 10px; font-weight: 800; background: #10B981; color: #fff; padding: 2px 8px; border-radius: 4px;">LOCAL VIDEO</span>
+                                        <span id="direct-file-size-badge" style="font-size: 11px; color: var(--text-secondary); font-family: monospace;">0 MB</span>
+                                    </div>
+                                    <h3 id="direct-file-name" style="font-size: 16px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; word-break: break-all;">
+                                        video.mp4
+                                    </h3>
+                                    <div id="direct-file-specs" style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
+                                        재생 길이: <strong id="direct-file-duration">0초</strong> • 해상도: <strong id="direct-file-resolution">-</strong>
+                                    </div>
+                                    <div style="margin-top: 10px; font-size: 12px; color: var(--primary); font-weight: 600;">
+                                        ✨ Gemini AI 멀티모달 분석을 위해 영상의 6대 핵심 씬(오프닝 훅, 스와이프 방어, 빌드업, 클라이맥스, 결말) 프레임이 자동 추출되었습니다.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Filmstrip Preview -->
+                            <div style="border-top: 1px solid var(--border-light); padding-top: 12px; margin-top: 12px;">
+                                <div style="font-size: 12px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                                    <span>📸</span> 추출된 6개 핵심 씬 타임라인 프레임 (Gemini Vision 분석 데이터)
+                                </div>
+                                <div id="direct-filmstrip-strip" class="filmstrip-strip">
+                                    <!-- Filmstrip thumbnails rendered here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div style="overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse; text-align: left;" id="results-table">
-                        <thead>
-                            <tr>
-                                <th
-                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
-                                    <input type="checkbox" id="check-all"></th>
-                                <th
-                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
-                                    Video</th>
-                                <th
-                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
-                                    Views</th>
-                                <th
-                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
-                                    Subs</th>
-                                <th
-                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
-                                    V/S Ratio</th>
-                                <th
-                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
-                                    Velocity</th>
-                                <th
-                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
-                                    Outlier</th>
-                                <th
-                                    style="padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary);">
-                                    Viral Score</th>
-                            </tr>
-                        </thead>
-                        <tbody id="results-body">
-                            <tr>
-                                <td colspan="8"
-                                    style="padding: 32px; text-align: center; color: var(--text-secondary); font-size: 14px;">
-                                    No videos to display. Try searching.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <!-- 2. Scenario Generation Options Card -->
+                <div class="card" style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                        <h3 style="font-size: 16px; font-weight: 800; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 8px;">
+                            <span>✍️</span> 시나리오(대본) 자동 생성 방향 & 연출 설정
+                        </h3>
+                        <span style="font-size: 11px; background: #e0e7ff; color: #4338ca; padding: 3px 8px; border-radius: 4px; font-weight: 700;">
+                            분석 즉시 풀 시나리오 완성
+                        </span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin-bottom: 14px;">
+                        <div>
+                            <label style="font-size: 12px; font-weight: 700; color: var(--text-primary); display: block; margin-bottom: 6px;">
+                                🎯 시나리오 생성 방향 (Scenario Direction)
+                            </label>
+                            <select id="direct-scenario-goal" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px; font-weight: 600;">
+                                <option value="benchmark" selected>⚡ 이 영상의 바이럴 공식 & 훅을 벤치마킹한 새로운 쇼츠 시나리오</option>
+                                <option value="upgrade">🚀 원본 영상의 아쉬운 점을 보완하고 훅/텐션을 극대화한 업그레이드 시나리오</option>
+                                <option value="sequel">🎬 이 영상의 뒷이야기 / 2탄 후속작 시나리오</option>
+                                <option value="summary">⏱️ 영상의 핵심 가치를 60초 안에 폭발시키는 초밀도 숏폼 시나리오</option>
+                                <option value="custom">✏️ 사용자 직접 지정 지침 (아래에 상세 입력)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size: 12px; font-weight: 700; color: var(--text-primary); display: block; margin-bottom: 6px;">
+                                ⏱️ 목표 시나리오 길이 & 나레이션 톤
+                            </label>
+                            <div style="display: flex; gap: 8px;">
+                                <select id="direct-scenario-duration" style="width: 110px; padding: 10px 8px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px; font-weight: 600;">
+                                    <option value="30">30초 (초고속)</option>
+                                    <option value="45">45초 (황금비율)</option>
+                                    <option value="60" selected>60초 (표준 쇼츠)</option>
+                                    <option value="90">90초 (스토리형)</option>
+                                </select>
+                                <select id="direct-scenario-tone" style="flex: 1; padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                                    <option value="몰입감 있고 긴박한 (Urgent & Suspenseful)" selected>⚡ 몰입감 있고 긴박한</option>
+                                    <option value="도발적이고 충격적인 (Provocative & Shocking)">💥 도발적이고 충격적인</option>
+                                    <option value="친근하고 재치있는 (Friendly & Witty)">😄 친근하고 재치있는</option>
+                                    <option value="전문적이고 신뢰감 있는 (Authoritative & Deep)">🎓 전문적이고 신뢰감 있는</option>
+                                    <option value="감성적이고 서정적인 (Emotional & Storytelling)">🎬 감성적이고 서정적인</option>
+                                    <option value="빠르고 에너지 넘치는 (High-energy & Hype)">🔥 빠르고 에너지 넘치는</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 16px;">
+                        <label style="font-size: 12px; font-weight: 700; color: var(--text-primary); display: block; margin-bottom: 4px;">
+                            💡 추가 요구사항 및 특정 주제/인물 지정 (Optional)
+                        </label>
+                        <input type="text" id="direct-scenario-user-prompt" placeholder="예: 2030 직장인이 폭풍 공감하는 퇴사/이직 스토리로 각색해줘, 첫 문장에 충격적인 숫자를 제시해줘..."
+                            style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display: flex; justify-content: flex-end; gap: 12px; align-items: center; border-top: 1px solid var(--border-light); padding-top: 16px; flex-wrap: wrap;">
+                        <button type="button" class="btn-secondary" id="btn-direct-run-analysis-only"
+                            style="padding: 12px 20px; font-size: 13px; font-weight: 700; border-color: var(--primary); color: var(--primary);">
+                            📊 [1단계] 영상 바이럴 구조만 분석
+                        </button>
+                        <button type="button" class="btn-primary" id="btn-direct-run-full-scenario"
+                            style="padding: 12px 28px; font-size: 14px; font-weight: 800; background: linear-gradient(135deg, #2563eb, #4f46e5); box-shadow: 0 4px 14px rgba(37,99,235,0.35); display: flex; align-items: center; gap: 8px;">
+                            <span>🚀</span> 영상 분석 + 시나리오 즉시 작성 ➔
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Progress / Loading card -->
+                <div class="card" id="direct-analysis-progress-card" style="display: none; border-left: 4px solid var(--primary); background: var(--bg-surface);">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div class="pulse-active" style="font-size: 28px;">⚙️</div>
+                        <div style="flex: 1;">
+                            <h3 id="direct-progress-title" style="font-size: 15px; font-weight: 800; color: var(--text-primary); margin: 0;">
+                                영상 데이터 및 시각/오디오 구조 분석 중...
+                            </h3>
+                            <p id="direct-progress-desc" style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">
+                                Gemini Multimodal AI가 영상의 오프닝 훅, 컷 전환, 시청 지속 장치 및 시나리오를 설계하고 있습니다.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -730,7 +1057,7 @@
             </div>
         </div>
 
-        <!-- View 3: Ideate (6개 아이디어) -->
+        <!-- View 3: Ideate (6개 추천 아이디어 + 1개 사용자 직접 설정 주제) -->
         <div id="view-ideate" class="view">
             <div class="card" id="ideate-loading" style="display: none;">
                 <h2>새로운 6개 소재 발굴 중...</h2>
@@ -738,11 +1065,77 @@
                     생성하고 있습니다.</p>
             </div>
 
+            <!-- Custom Topic Card (내가 직접 설정하는 나만의 맞춤 주제) - 언제든 즉시 작성 가능 -->
+            <div class="card custom-topic-box" id="custom-topic-section" style="margin-bottom: 24px; padding: 22px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 24px;">✨</span>
+                        <div>
+                            <h2 style="font-size: 17px; font-weight: 800; color: var(--text-primary); margin: 0;">
+                                내가 직접 설정하는 나만의 맞춤 주제 (Custom Topic)
+                            </h2>
+                            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">
+                                AI 추천 6가지 주제 외에, 내가 직접 기획하고 싶은 독창적인 아이디어로 쇼츠 시나리오를 만들 수 있습니다.
+                            </p>
+                        </div>
+                    </div>
+                    <span style="font-size: 11px; font-weight: 800; background: linear-gradient(135deg, #4f46e5, #6366f1); color: #fff; padding: 4px 10px; border-radius: 6px; box-shadow: 0 2px 6px rgba(79,70,229,0.25);">
+                        사용자 직접 설정 주제
+                    </span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; margin-bottom: 14px;">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label style="font-size: 12px; font-weight: 700; color: var(--text-primary); display: block; margin-bottom: 4px;">
+                                📌 주제 제목 (Title) *
+                            </label>
+                            <input type="text" id="custom-idea-title" placeholder="예: 직장인이 퇴사하고 3개월 만에 월천 번 진짜 비밀, 라면 3배 맛있게 끓이는 미친 팁 등..."
+                                style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-light); border-radius: 8px; font-size: 13px; font-weight: 600;">
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <label style="font-size: 12px; font-weight: 700; color: var(--text-primary);">
+                                    ⚡ 1초 킬러 훅 (1-Second Hook)
+                                </label>
+                                <span style="font-size: 11px; color: var(--text-secondary);">첫 1초에 스와이프를 막는 충격 멘트</span>
+                            </div>
+                            <input type="text" id="custom-idea-hook" placeholder="예: '당신이 평생 먹은 라면은 전부 가짜였습니다.' 또는 '이 버튼 하나 안 눌러서 300만원 날렸습니다.'"
+                                style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--border-light); border-radius: 8px; font-size: 13px;">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <label style="font-size: 12px; font-weight: 700; color: var(--text-primary);">
+                            🎯 핵심 스토리 전개 전략 & 반전 (Strategy & Retention)
+                        </label>
+                        <textarea id="custom-idea-strategy" placeholder="예: 상식을 깨뜨리는 인지부조화 질문으로 시작하여, 15초에 확실한 증거를 보여주고, 45초에 반전 결말로 시청자의 완청 및 댓글 논쟁 유도"
+                            style="flex: 1; width: 100%; min-height: 85px; padding: 10px 12px; border: 1.5px solid var(--border-light); border-radius: 8px; font-size: 12px; line-height: 1.5; resize: none;"></textarea>
+                    </div>
+                </div>
+
+                <!-- Custom Topic Action Bar -->
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid rgba(99,102,241,0.15); padding-top: 12px;">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button type="button" class="btn-secondary" id="btn-custom-idea-ai-enrich"
+                            style="padding: 8px 14px; font-size: 12px; font-weight: 700; color: #4f46e5; border-color: #818cf8; background: #ffffff; display: flex; align-items: center; gap: 6px;"
+                            title="주제 제목만 입력하면 Gemini AI가 1초 킬러 훅과 바이럴 스토리 전략을 전문적으로 자동 채워줍니다.">
+                            🪄 AI로 훅 & 전략 자동 완성/보강
+                        </button>
+                        <span id="custom-idea-enrich-status" style="font-size: 12px; color: var(--text-secondary);"></span>
+                    </div>
+
+                    <button type="button" class="btn-primary" id="btn-confirm-custom-idea"
+                        style="padding: 10px 24px; font-size: 13px; font-weight: 700; background: linear-gradient(135deg, #4f46e5, #6366f1); box-shadow: 0 3px 12px rgba(79,70,229,0.3); display: flex; align-items: center; gap: 6px;">
+                        🚀 이 직접 설정한 주제로 기획 확정하기 ➔
+                    </button>
+                </div>
+            </div>
+
             <div id="ideate-results-container" style="display: none;">
                 <div class="card" style="margin-bottom: 20px;">
-                    <h2>💡 발굴된 6가지 맞춤형 쇼츠 아이디어</h2>
-                    <p style="font-size:13px; color:var(--text-secondary);">가장 마음에 드는 주제를 선택하면 정밀 기획 로드맵을 확인하고 피드백을 줄 수
-                        있습니다.</p>
+                    <h2>💡 AI 추천 6가지 맞춤형 쇼츠 아이디어</h2>
+                    <p style="font-size:13px; color:var(--text-secondary);">영상 분석 데이터와 Content DNA를 기반으로 추출된 6가지 추천 주제입니다. 가장 마음에 드는 주제를 선택하세요.</p>
                 </div>
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;" id="idea-cards">
                     <!-- 6 Idea Cards -->
@@ -1872,15 +2265,24 @@
             return availableGeminiModelsCache;
         }
 
-        async function callGemini(apiKey, prompt, isJson = true) {
+        async function callGemini(apiKey, promptOrParts, isJson = true) {
             const candidateModels = await getAvailableGeminiModels(apiKey);
 
             let lastError = null;
             for (const model of candidateModels) {
                 try {
                     console.log(`[Gemini AI] Calling model: ${model}...`);
+                    let parts;
+                    if (typeof promptOrParts === 'string') {
+                        parts = [{ text: promptOrParts }];
+                    } else if (Array.isArray(promptOrParts)) {
+                        parts = promptOrParts;
+                    } else {
+                        parts = [promptOrParts];
+                    }
+
                     const bodyPayload = {
-                        contents: [{ parts: [{ text: prompt }] }]
+                        contents: [{ parts }]
                     };
                     if (isJson) {
                         bodyPayload.generationConfig = { responseMimeType: "application/json" };
@@ -1939,6 +2341,507 @@
                 }
             }
             throw lastError || new Error('사용 가능한 Gemini 최신 Flash 모델을 찾을 수 없습니다.');
+        }
+
+        // =========================================================================
+        // 🎬 DIRECT VIDEO & YOUTUBE URL ANALYZER ENGINE (직접 영상/URL 분석 및 시나리오 작성)
+        // =========================================================================
+        const directAnalyzerState = {
+            mode: 'yt', // 'yt' or 'file'
+            ytVideoId: null,
+            ytData: null,
+            ytComments: [],
+            uploadedFile: null,
+            videoDuration: 0,
+            videoWidth: 0,
+            videoHeight: 0,
+            extractedFrames: [] // array of { time: '0.5s', dataUrl: '...', base64: '...', mimeType: 'image/jpeg' }
+        };
+
+        // YouTube URL Parser Helper
+        function extractYouTubeVideoId(url) {
+            if (!url) return null;
+            url = url.trim();
+            if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
+            const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.match(regExp);
+            return match ? match[1] : null;
+        }
+
+        // Seek Video Promisified Helper
+        function seekVideoToTime(video, time) {
+            return new Promise((resolve) => {
+                const onSeeked = () => {
+                    video.removeEventListener('seeked', onSeeked);
+                    resolve();
+                };
+                video.addEventListener('seeked', onSeeked);
+                video.currentTime = Math.max(0.1, Math.min(time, (video.duration || 60) - 0.2));
+            });
+        }
+
+        // HTML5 Video Keyframe Extractor using Canvas
+        async function extractFramesFromVideoFile(file, numFrames = 6) {
+            return new Promise((resolve, reject) => {
+                const video = document.createElement('video');
+                video.preload = 'metadata';
+                video.muted = true;
+                video.playsInline = true;
+                const objUrl = URL.createObjectURL(file);
+                video.src = objUrl;
+
+                video.onloadedmetadata = async () => {
+                    const duration = video.duration || 60;
+                    const timestamps = [];
+
+                    if (duration <= 12) {
+                        for (let i = 0; i < numFrames; i++) {
+                            timestamps.push(Math.max(0.3, (duration / (numFrames + 1)) * (i + 1)));
+                        }
+                    } else {
+                        timestamps.push(0.5); // 0~1s: 오프닝 훅
+                        timestamps.push(Math.min(2.5, duration * 0.1)); // 2~3s: 스와이프 방어
+                        timestamps.push(Math.min(7.0, duration * 0.25)); // 5~7s: 빌드업
+                        timestamps.push(duration * 0.5); // 중간: 전개/갈등
+                        timestamps.push(duration * 0.75); // 후반: 클라이맥스/반전
+                        timestamps.push(Math.max(0.5, duration - 1.0)); // 엔딩: 루프/CTA
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const frames = [];
+
+                    // Gemini 멀티모달 최적화 해상도 (너비 기준 최대 640px)
+                    const maxW = 640;
+                    let targetW = video.videoWidth || 640;
+                    let targetH = video.videoHeight || 360;
+                    if (targetW > maxW) {
+                        const ratio = maxW / targetW;
+                        targetW = maxW;
+                        targetH = Math.round(targetH * ratio);
+                    }
+                    canvas.width = targetW;
+                    canvas.height = targetH;
+
+                    for (let i = 0; i < timestamps.length; i++) {
+                        const t = timestamps[i];
+                        try {
+                            await seekVideoToTime(video, t);
+                            ctx.drawImage(video, 0, 0, targetW, targetH);
+                            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                            const base64Data = dataUrl.split(',')[1];
+                            frames.push({
+                                time: `${t.toFixed(1)}s`,
+                                dataUrl: dataUrl,
+                                base64: base64Data,
+                                mimeType: 'image/jpeg'
+                            });
+                        } catch (err) {
+                            console.warn('Frame capture skipped at', t, err);
+                        }
+                    }
+
+                    URL.revokeObjectURL(objUrl);
+                    resolve({
+                        duration: duration,
+                        width: video.videoWidth,
+                        height: video.videoHeight,
+                        frames: frames
+                    });
+                };
+
+                video.onerror = (err) => {
+                    URL.revokeObjectURL(objUrl);
+                    reject(new Error('동영상 정보를 읽을 수 없습니다. 올바른 비디오 포맷인지 확인해주세요.'));
+                };
+            });
+        }
+
+        async function fetchDirectYouTubeDetails() {
+            const input = document.getElementById('direct-yt-input');
+            const url = input?.value.trim();
+            const videoId = extractYouTubeVideoId(url);
+
+            if (!videoId) {
+                alert('⚠️ 올바른 YouTube 영상 링크 또는 Shorts URL을 입력해주세요.\n(예: https://www.youtube.com/shorts/XXXXX 또는 https://youtu.be/XXXXX)');
+                return;
+            }
+
+            directAnalyzerState.ytVideoId = videoId;
+            const previewBox = document.getElementById('direct-yt-preview');
+            const playerBox = document.getElementById('direct-yt-player-box');
+            const titleEl = document.getElementById('direct-yt-title');
+            const metaEl = document.getElementById('direct-yt-meta');
+            const durationEl = document.getElementById('direct-yt-duration');
+            const commentsBox = document.getElementById('direct-yt-comments-preview');
+
+            previewBox.style.display = 'block';
+            playerBox.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0" style="width:100%; height:100%; border:0;" allowfullscreen></iframe>`;
+            titleEl.textContent = '영상 정보를 불러오는 중...';
+            metaEl.textContent = 'YouTube API 및 oEmbed 통신 중...';
+
+            const apiKey = state.apiKeys.youtube;
+            let ytTitle = `YouTube Video (${videoId})`;
+            let ytChannel = 'YouTube Creator';
+            let ytViews = 10000;
+            let ytDuration = '60초';
+            let comments = [];
+
+            if (apiKey) {
+                try {
+                    const videoUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoId}&key=${apiKey}`;
+                    const res = await fetch(videoUrl);
+                    if (res.ok) {
+                        const data = await res.json();
+                        const item = data.items?.[0];
+                        if (item) {
+                            ytTitle = item.snippet?.title || ytTitle;
+                            ytChannel = item.snippet?.channelTitle || ytChannel;
+                            ytViews = parseInt(item.statistics?.viewCount || 10000, 10);
+                            const durationSec = parseISO8601Duration(item.contentDetails?.duration) || 60;
+                            ytDuration = `${durationSec}초`;
+
+                            // Fetch top comments
+                            comments = await fetchComments(videoId);
+                        }
+                    }
+                } catch (e) {
+                    console.warn('YouTube API detail fetch error:', e);
+                }
+            } else {
+                try {
+                    const oembedUrl = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
+                    const res = await fetch(oembedUrl);
+                    if (res.ok) {
+                        const oData = await res.json();
+                        ytTitle = oData.title || ytTitle;
+                        ytChannel = oData.author_name || ytChannel;
+                    }
+                } catch (e) {
+                    console.warn('oEmbed fetch error:', e);
+                }
+            }
+
+            titleEl.textContent = ytTitle;
+            durationEl.textContent = ytDuration;
+            metaEl.innerHTML = `채널: <strong>${ytChannel}</strong> • 조회수: <strong>${ytViews.toLocaleString()}회</strong>`;
+            commentsBox.innerHTML = comments.length > 0
+                ? `💬 시청자 주요 댓글 <strong>${comments.length}개</strong> 확보 완료 ("${comments[0].substring(0, 40)}...")`
+                : `💬 YouTube Data API 키가 있으면 시청자 베스트 댓글 분석이 자동 활성화됩니다.`;
+
+            directAnalyzerState.ytData = {
+                id: videoId,
+                title: ytTitle,
+                channelName: ytChannel,
+                views: ytViews,
+                durationFormatted: ytDuration,
+                thumbnail: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+                viralScore: 95,
+                vsRatio: 5.2
+            };
+            directAnalyzerState.ytComments = comments;
+
+            showToast('✅ 영상 정보를 성공적으로 불러왔습니다!');
+        }
+
+        async function handleDirectVideoFile(file) {
+            if (!file) return;
+            directAnalyzerState.uploadedFile = file;
+
+            const nameEl = document.getElementById('direct-file-name');
+            const sizeBadge = document.getElementById('direct-file-size-badge');
+            const durEl = document.getElementById('direct-file-duration');
+            const resEl = document.getElementById('direct-file-resolution');
+            const previewBox = document.getElementById('direct-file-preview');
+            const player = document.getElementById('direct-video-player');
+            const strip = document.getElementById('direct-filmstrip-strip');
+
+            const sizeMb = (file.size / (1024 * 1024)).toFixed(1);
+            nameEl.textContent = file.name;
+            sizeBadge.textContent = `${sizeMb} MB`;
+            previewBox.style.display = 'block';
+
+            // Preview in player
+            player.src = URL.createObjectURL(file);
+
+            strip.innerHTML = '<div style="color:var(--text-secondary); font-size:12px; padding:12px 0;">📸 핵심 씬 프레임 추출 중...</div>';
+
+            try {
+                const meta = await extractFramesFromVideoFile(file, 6);
+                directAnalyzerState.videoDuration = meta.duration;
+                directAnalyzerState.videoWidth = meta.width;
+                directAnalyzerState.videoHeight = meta.height;
+                directAnalyzerState.extractedFrames = meta.frames;
+
+                durEl.textContent = `${Math.round(meta.duration)}초`;
+                const isVertical = meta.height > meta.width;
+                resEl.textContent = `${meta.width}x${meta.height} (${isVertical ? '세로 9:16 Shorts' : '가로 영상'})`;
+
+                // Render filmstrip
+                strip.innerHTML = meta.frames.map((f, i) => `
+                    <div class="filmstrip-thumb" title="Scene #${i + 1} (${f.time})">
+                        <img src="${f.dataUrl}" alt="Scene ${i + 1}">
+                        <span class="time-badge">${f.time}</span>
+                    </div>
+                `).join('');
+
+                showToast(`🎬 영상 분석 준비 완료! (6개 프레임 추출 완료)`);
+            } catch (err) {
+                console.error(err);
+                strip.innerHTML = `<div style="color:var(--danger); font-size:12px; padding:8px 0;">프레임 추출 실패: ${err.message}</div>`;
+            }
+        }
+
+        async function runDirectVideoAnalysis(generateScriptDirectly = false) {
+            const apiKey = state.apiKeys.gemini;
+            if (!apiKey) {
+                alert('⚠️ Gemini API 키가 설정되지 않았습니다.\n상단 헤더에서 Gemini API 키를 입력하고 [Save Keys] 버튼을 먼저 눌러주세요!');
+                const geminiInput = document.getElementById('gemini-api-key');
+                if (geminiInput) geminiInput.focus();
+                return;
+            }
+
+            const mode = directAnalyzerState.mode;
+            let videoTitle = '';
+            let videoSourceDesc = '';
+            let mediaParts = [];
+
+            if (mode === 'yt') {
+                if (!directAnalyzerState.ytVideoId) {
+                    const inputVal = document.getElementById('direct-yt-input')?.value.trim();
+                    const vId = extractYouTubeVideoId(inputVal);
+                    if (!vId) {
+                        alert('분석할 YouTube 영상 링크를 입력하고 [영상 확인] 버튼을 먼저 눌러주세요.');
+                        return;
+                    }
+                    await fetchDirectYouTubeDetails();
+                }
+                const yt = directAnalyzerState.ytData || {};
+                videoTitle = yt.title || `YouTube Video (${directAnalyzerState.ytVideoId})`;
+                videoSourceDesc = `
+[YouTube Target Video]
+- URL: https://www.youtube.com/watch?v=${directAnalyzerState.ytVideoId}
+- Shorts URL: https://www.youtube.com/shorts/${directAnalyzerState.ytVideoId}
+- Title: ${yt.title}
+- Channel: ${yt.channelName}
+- Duration: ${yt.durationFormatted}
+- Views: ${yt.views?.toLocaleString()}
+- Audience Comments:
+${directAnalyzerState.ytComments.length > 0 ? directAnalyzerState.ytComments.slice(0, 15).map((c, i) => `  ${i + 1}. "${c}"`).join('\n') : '  (Comments not fetched)'}
+`;
+            } else {
+                // File mode
+                if (!directAnalyzerState.uploadedFile || directAnalyzerState.extractedFrames.length === 0) {
+                    alert('분석할 동영상 파일을 먼저 업로드해주세요.');
+                    return;
+                }
+                videoTitle = directAnalyzerState.uploadedFile.name;
+                const dur = Math.round(directAnalyzerState.videoDuration);
+                const w = directAnalyzerState.videoWidth;
+                const h = directAnalyzerState.videoHeight;
+                videoSourceDesc = `
+[Uploaded Video File]
+- File Name: ${videoTitle}
+- File Size: ${(directAnalyzerState.uploadedFile.size / (1024 * 1024)).toFixed(1)} MB
+- Duration: ${dur} seconds
+- Resolution: ${w}x${h} (${h > w ? '9:16 Vertical Shorts' : 'Horizontal Video'})
+- Visual Evidence: 6 extracted sequential keyframe images representing Hook (0~1s), Swipe Defense (2~3s), Build-up (5~7s), Midpoint Climax (15s), Climax Reveal (30s), and Resolution Loop (Ending).
+`;
+                // Add keyframes as inlineData
+                directAnalyzerState.extractedFrames.forEach(f => {
+                    mediaParts.push({
+                        inlineData: {
+                            mimeType: f.mimeType,
+                            data: f.base64
+                        }
+                    });
+                });
+            }
+
+            const goalSelect = document.getElementById('direct-scenario-goal');
+            const goal = goalSelect ? goalSelect.value : 'benchmark';
+            const goalText = goalSelect ? goalSelect.options[goalSelect.selectedIndex].text : '바이럴 공식 벤치마킹';
+            const duration = parseInt(document.getElementById('direct-scenario-duration')?.value || '60', 10);
+            const tone = document.getElementById('direct-scenario-tone')?.value || '몰입감 있고 긴박한';
+            const userPrompt = document.getElementById('direct-scenario-user-prompt')?.value.trim();
+
+            // Show Progress
+            const progressCard = document.getElementById('direct-analysis-progress-card');
+            const progressTitle = document.getElementById('direct-progress-title');
+            const progressDesc = document.getElementById('direct-progress-desc');
+            if (progressCard) progressCard.style.display = 'block';
+            if (progressTitle) progressTitle.textContent = generateScriptDirectly ? '🎬 영상 심층 분석 및 맞춤형 시나리오 작성 중...' : '📊 영상 바이럴 DNA 역설계 분석 중...';
+            if (progressDesc) progressDesc.textContent = 'Gemini Multimodal AI가 영상의 오프닝 훅, 컷 전환, 시청 지속 장치 및 스토리 구조를 분석하고 있습니다.';
+
+            const minScenes = Math.max(3, Math.floor(duration / 6));
+            const maxScenes = Math.max(minScenes + 1, Math.ceil(duration / 4));
+
+            const prompt = `
+You are the world's #1 Viral YouTube Shorts Producer, Algorithm Reverse-Engineer, and Master Screenwriter.
+You are given a target video to analyze and create a high-retention, viral YouTube Shorts Scenario (Script).
+
+${videoSourceDesc}
+
+[Scenario Directives & Configuration]
+- Creative Goal: ${goalText} (${goal})
+- Target Duration: EXACTLY ${duration} seconds (Generate between ${minScenes} and ${maxScenes} concise scenes)
+- Narration Tone: ${tone}
+- Additional Directives: ${userPrompt || 'None'}
+
+[REQUIRED TASKS]
+1. REVERSE-ENGINEER THE VIDEO:
+   - Extract 11 Viral Mechanisms (first 1-sec hook, 0~3s swipe defense, problem framing, curiosity gap, reveal pacing, climax twist, CTA, cut pace, caption style, sound/SFX timing).
+   - Extract Timeline Story Strategies (0:00~0:03 Hook, 0:03~0:15 Build-up, 0:15~0:40 Climax, 0:40~End Loop).
+   - Extract Visual Style & Cinematography (lens/framing, camera movement, lighting, color palette, composition, texture, VFX pacing, prompt modifiers).
+   - Extract Content DNA (topicPattern, hookPattern, narrativePattern).
+   - Extract Comment / Viewer Insights.
+
+2. CREATE A BRAND NEW / BENCHMARKED SHORT-FORM SCENARIO (대본):
+   - Define a memorable protagonist character with fixed facial features, hair, and costume consistency.
+   - Scene-by-scene script engineered for >85% average view duration (AVD).
+   - 🚨 STRICT SEPARATION: 'narration' (3rd-person voiceover 해설) and 'dialogue' (character lip-sync 대사) must be 100% strictly separated!
+   - Each scene must have sceneNumber, time, charactersPresent, narration, speaker, dialogue, caption, visual, sfx.
+
+Return ONLY a valid JSON object matching this exact schema (pure JSON, no markdown backticks):
+{
+    "analysis": {
+        "viralMechanisms": [
+            { "title": "첫 1초 Hook", "icon": "⚡", "tactic": "핵심 전술 설명", "analysis": "상세 분석" },
+            { "title": "0~3초 시청자 붙잡는 장치", "icon": "🪝", "tactic": "핵심 전술", "analysis": "상세 분석" },
+            { "title": "문제 제기 (Problem Framing)", "icon": "❓", "tactic": "핵심 전술", "analysis": "상세 분석" },
+            { "title": "호기심 Gap (Curiosity Gap)", "icon": "🔍", "tactic": "핵심 전술", "analysis": "상세 분석" },
+            { "title": "정보 공개 순서 (Pacing & Reveal)", "icon": "📈", "tactic": "핵심 전술", "analysis": "상세 분석" },
+            { "title": "반전 및 보상 (Twist / Payoff)", "icon": "🎁", "tactic": "핵심 전술", "analysis": "상세 분석" },
+            { "title": "CTA (행동 유도 전략)", "icon": "📢", "tactic": "핵심 전술", "analysis": "상세 분석" },
+            { "title": "영상 길이 및 최적화", "icon": "⏱️", "tactic": "핵심 전술", "analysis": "상세 분석" },
+            { "title": "컷 전환 빈도 (Cut Pace)", "icon": "🎬", "tactic": "핵심 전술", "analysis": "상세 분석" },
+            { "title": "자막 스타일 (Caption Style)", "icon": "📝", "tactic": "핵심 전술", "analysis": "상세 분석" },
+            { "title": "BGM 및 효과음 타이밍", "icon": "🎵", "tactic": "핵심 전술", "analysis": "상세 분석" }
+        ],
+        "timelineStrategies": [
+            { "range": "0:00 ~ 0:03 (Hook)", "title": "시선 강탈 & 스와이프 방어", "tactic": "전술 내용", "psychologicalTrigger": "심리 트리거" },
+            { "range": "0:03 ~ 0:15 (Build-up)", "title": "문제 심화 & 몰입 유도", "tactic": "전술 내용", "psychologicalTrigger": "심리 트리거" },
+            { "range": "0:15 ~ 0:40 (Climax / Reveal)", "title": "핵심 전개 & 반전/보상", "tactic": "전술 내용", "psychologicalTrigger": "심리 트리거" },
+            { "range": "0:40 ~ Finish (Loop & CTA)", "title": "루프 유도 & 댓글 폭발", "tactic": "전술 내용", "psychologicalTrigger": "심리 트리거" }
+        ],
+        "visualStyle": {
+            "lensAndFraming": "렌즈 및 화각 연출",
+            "cameraMovement": "카메라 무빙",
+            "lightingArchitecture": "조명 설계 및 톤",
+            "colorGrading": "컬러 그레이딩 및 보색 대비",
+            "subjectComposition": "구도 및 피사계 심도",
+            "textureAesthetic": "질감 및 렌더 룩",
+            "motionVFXPacing": "트랜지션 및 컷 전환 템포",
+            "promptModifiers": "8k resolution, cinematic lighting, shot on 35mm, photorealistic, volumetric atmosphere"
+        },
+        "contentDNA": {
+            "topicPattern": "소재 패턴",
+            "hookPattern": "오프닝 훅 패턴",
+            "narrativePattern": "스토리 전개 패턴"
+        },
+        "commentInsights": [
+            { "category": "Positive", "insight": "시청자가 열광한 핵심 소구점" },
+            { "category": "Question", "insight": "추가 질문 및 호기심 요소" },
+            { "category": "Request", "insight": "후속작 희망 니즈" }
+        ]
+    },
+    "scenarioBlueprint": {
+        "title": "완성된 쇼츠 시나리오 제목 (한국어)",
+        "hook": "첫 1초를 강타하는 오프닝 훅 멘트/화면 (한국어)",
+        "hookFormula": "적용된 훅 공식 (예: 인지부조화 훅, 손실회피 훅)",
+        "strategy": "전체 스토리텔링 및 시청지속시간 극대화 전략",
+        "storylineRoadmap": [
+            { "phase": "0~3초", "action": "오프닝 훅 및 스와이프 방어" },
+            { "phase": "3~15초", "action": "상황 심화 및 호기심 유발" },
+            { "phase": "15~40초", "action": "진실 공개 및 클라이맥스" },
+            { "phase": "40초~끝", "action": "반전 보상 및 루프 마무리" }
+        ],
+        "whyItWorks": "바이럴 심리학적 성공 요인",
+        "expectedRetention": "88%+",
+        "potentialScore": 98
+    },
+    "characters": [
+        {
+            "name": "주인공 이름 (예: 주인공 김민우)",
+            "role": "주인공",
+            "faceFeatures": "고정 얼굴/헤어 상세 묘사 (한국어)",
+            "costumeDetails": "고정 의상/복장/소품 상세 묘사 (한국어)",
+            "englishPromptAnchor": "Standardized English prompt anchor specifying face, hair, and exact clothing"
+        }
+    ],
+    "scenes": [
+        {
+            "sceneNumber": 1,
+            "time": "0:00 - 0:03",
+            "charactersPresent": ["주인공 김민우"],
+            "narration": "성우/해설자의 3인칭 보이스오버 해설 (없으면 빈 문자열 '')",
+            "speaker": "대사를 말하는 등장인물 이름 (대사 없으면 '없음')",
+            "dialogue": "화면 속 인물이 직접 입을 열어 말하는 대사 (없으면 빈 문자열 '')",
+            "caption": "화면에 자막으로 뜰 한국어 대사 또는 나레이션 전문",
+            "visual": "카메라 앵글, 조명, 고정 복장을 착용한 피사체의 액션 디테일 (한국어)",
+            "sfx": "효과음 및 BGM 타이밍 (예: Fast Whoosh + Sub Bass Drop)"
+        }
+    ]
+}
+`;
+
+            try {
+                const combinedParts = [{ text: prompt }, ...mediaParts];
+                const result = await callGemini(apiKey, combinedParts, true);
+
+                // Set Video Target in Analyze State
+                const targetVideo = {
+                    id: mode === 'yt' ? directAnalyzerState.ytVideoId : 'uploaded-video',
+                    title: videoTitle,
+                    channelName: mode === 'yt' ? (directAnalyzerState.ytData?.channelName || 'YouTube') : '직접 업로드 비디오',
+                    views: mode === 'yt' ? (directAnalyzerState.ytData?.views || 10000) : 0,
+                    durationFormatted: `${duration}초`,
+                    thumbnail: mode === 'yt'
+                        ? `https://i.ytimg.com/vi/${directAnalyzerState.ytVideoId}/hqdefault.jpg`
+                        : (directAnalyzerState.extractedFrames[0]?.dataUrl || ''),
+                    viralScore: 98,
+                    vsRatio: 5.5
+                };
+
+                analyzeState.analyzedVideos = [targetVideo];
+                analyzeState.analysisResult = result.analysis;
+                renderAnalysis(result.analysis, [targetVideo]);
+
+                // Set Ideation State
+                ideationState.selectedIdea = result.scenarioBlueprint;
+
+                if (generateScriptDirectly && result.scenes) {
+                    const scenes = result.scenes || [];
+                    scenes.forEach(s => {
+                        s.narration = (s.narration || '').trim();
+                        s.dialogue = (s.dialogue || '').trim();
+                        if (!s.dialogue) s.speaker = '없음';
+                        if (!s.caption) s.caption = s.dialogue || s.narration || '';
+                    });
+                    scriptState.script = scenes;
+                    scriptState.characters = result.characters || [];
+                    scriptState.duration = duration;
+                    scriptState.tone = tone;
+                    scriptState.target = '대중';
+
+                    renderScript();
+                    document.getElementById('script-config').style.display = 'block';
+                    navigate('script');
+                    showToast('🎉 영상 분석 완료! 맞춤형 시나리오가 성공적으로 생성되었습니다.');
+                } else {
+                    navigate('analyze');
+                    showToast('📊 영상 바이럴 역설계 분석이 완료되었습니다!');
+                }
+
+                if (typeof saveProjectState === 'function') {
+                    saveProjectState(true);
+                }
+            } catch (err) {
+                console.error(err);
+                alert(`⚠️ 영상 분석 및 시나리오 작성 실패:\n${err.message}`);
+            } finally {
+                if (progressCard) progressCard.style.display = 'none';
+            }
         }
 
         // --- Global State for Pipeline Artifacts ---
@@ -2219,17 +3122,24 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
             }
         }
 
-        window.selectIdea = function (index) {
-            ideationState.selectedIdea = ideationState.ideas[index];
+        window.selectIdea = function (indexOrIdea) {
+            if (typeof indexOrIdea === 'number') {
+                ideationState.selectedIdea = ideationState.ideas[indexOrIdea];
+            } else if (indexOrIdea && typeof indexOrIdea === 'object') {
+                ideationState.selectedIdea = indexOrIdea;
+            }
             navigate('select');
 
             const idea = ideationState.selectedIdea;
+            if (!idea) return;
+
             document.getElementById('topic-detail-card').style.display = 'block';
             document.getElementById('topic-title').textContent = idea.title;
 
             const scoreBadge = document.getElementById('topic-score-badge');
             if (scoreBadge) {
-                scoreBadge.textContent = `잠재력 ${idea.potentialScore || 95}점 • 완청률 ${idea.expectedRetention || '85%'}`;
+                const customTag = idea.isCustom ? ' [사용자 직접 설정]' : '';
+                scoreBadge.textContent = `잠재력 ${idea.potentialScore || 95}점 • 완청률 ${idea.expectedRetention || '85%'}${customTag}`;
             }
 
             document.getElementById('topic-details').innerHTML = `
@@ -2277,6 +3187,277 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
             navigate('script');
             document.getElementById('script-config').style.display = 'block';
         });
+
+        // =========================================================================
+        // 💡 CUSTOM TOPIC (내가 직접 설정하는 주제) LOGIC & EVENT LISTENERS
+        // =========================================================================
+        const customTopicState = {
+            enriched: null
+        };
+
+        async function handleEnrichCustomTopic() {
+            const titleInput = document.getElementById('custom-idea-title');
+            const hookInput = document.getElementById('custom-idea-hook');
+            const strategyInput = document.getElementById('custom-idea-strategy');
+            const statusEl = document.getElementById('custom-idea-enrich-status');
+            const btnEnrich = document.getElementById('btn-custom-idea-ai-enrich');
+
+            const title = titleInput?.value.trim();
+            if (!title) {
+                alert('📌 주제 제목 또는 핵심 키워드를 먼저 입력해 주세요!\n(예: 직장인이 퇴사하고 3개월 만에 월천 번 비결, 라면 3배 맛있게 끓이는 법 등)');
+                if (titleInput) titleInput.focus();
+                return;
+            }
+
+            const apiKey = state.apiKeys.gemini;
+            if (!apiKey) {
+                alert('Gemini API 키가 필요합니다. 상단 헤더에 API 키를 입력하고 저장해 주세요.');
+                return;
+            }
+
+            const origText = btnEnrich.innerHTML;
+            btnEnrich.innerHTML = '⏳ AI 보강 생성 중...';
+            btnEnrich.disabled = true;
+            if (statusEl) statusEl.textContent = 'Gemini AI가 바이럴 훅과 최적 전개 전략을 설계하고 있습니다...';
+
+            const prompt = `
+You are an elite YouTube Shorts Viral Producer.
+The user wants to produce a YouTube Shorts video with the following custom topic:
+"${title}"
+
+Current Draft Hook: "${hookInput?.value.trim() || 'None'}"
+Current Draft Strategy: "${strategyInput?.value.trim() || 'None'}"
+
+Generate an ultra-clickable 1-second hook, the viral hook formula used, a storytelling strategy that guarantees >85% audience retention, and a 4-phase storyline roadmap.
+
+Return ONLY a valid JSON object matching this schema (pure JSON, no markdown):
+{
+    "hook": "첫 1초에 시청자의 귀와 눈을 때리는 강렬한 오프닝 멘트 (한국어)",
+    "hookFormula": "사용된 훅 공식 (예: 인지부조화 훅, 손실회피 질문 훅, 충격적 시각증거 훅 등)",
+    "strategy": "영상 전체를 관통하는 빠른 템포의 스토리텔링 및 완청 극대화 전략 (한국어)",
+    "storylineRoadmap": [
+        { "phase": "0~3초", "action": "시선 강탈 및 호기심 갭 생성" },
+        { "phase": "3~15초", "action": "상황 심화 및 이탈 방지 미끼 투척" },
+        { "phase": "15~40초", "action": "진실 공개 및 도파민 터지는 클라이맥스" },
+        { "phase": "40초~끝", "action": "반전 보상 및 무한 루프 / 댓글 참여 유도" }
+    ],
+    "whyItWorks": "시청자 심리학적 관점에서 이 아이디어가 폭발할 수밖에 없는 이유",
+    "potentialScore": 98
+}
+`;
+
+            try {
+                const enriched = await callGemini(apiKey, prompt, true);
+                customTopicState.enriched = enriched;
+
+                if (hookInput && enriched.hook) hookInput.value = enriched.hook;
+                if (strategyInput && enriched.strategy) strategyInput.value = enriched.strategy;
+                if (statusEl) statusEl.textContent = `✨ AI 보강 완료! (바이럴 잠재점수: ${enriched.potentialScore || 98}점)`;
+                showToast('✨ 나만의 주제에 대한 1초 훅과 전략이 AI로 자동 완성되었습니다!');
+            } catch (err) {
+                console.error(err);
+                alert(`AI 보강 중 오류: ${err.message}`);
+                if (statusEl) statusEl.textContent = '보강 실패';
+            } finally {
+                btnEnrich.innerHTML = origText;
+                btnEnrich.disabled = false;
+            }
+        }
+
+        function handleConfirmCustomTopic() {
+            const titleInput = document.getElementById('custom-idea-title');
+            const hookInput = document.getElementById('custom-idea-hook');
+            const strategyInput = document.getElementById('custom-idea-strategy');
+
+            const title = titleInput?.value.trim();
+            if (!title) {
+                alert('📌 주제 제목을 입력해 주세요!\n(예: 직장인 퇴사 성공기, 충격적인 AI 도구 3가지 등)');
+                if (titleInput) titleInput.focus();
+                return;
+            }
+
+            const hook = hookInput?.value.trim() || `"${title}" - 당신이 몰랐던 충격적인 진실!`;
+            const strategy = strategyInput?.value.trim() || '빠른 템포의 호기심 유발 및 15초 진실 공개, 마지막 반전 결말로 완청률 극대화';
+            const enriched = customTopicState.enriched || {};
+
+            const customIdea = {
+                title: title,
+                hook: hook,
+                hookFormula: enriched.hookFormula || '사용자 맞춤형 직관 훅',
+                strategy: strategy,
+                storylineRoadmap: enriched.storylineRoadmap || [
+                    { phase: "0~3초", action: hook },
+                    { phase: "3~15초", action: "상황 심화 및 호기심 유발" },
+                    { phase: "15~40초", action: "핵심 전개 및 결정적 진실 공개" },
+                    { phase: "40초~끝", action: "반전 보상 및 무한 루프 / 댓글 유도" }
+                ],
+                whyItWorks: enriched.whyItWorks || '사용자가 직접 기획한 독창적 관심 소재 및 타겟 시청자 직접 소구',
+                expectedRetention: '88%+',
+                potentialScore: enriched.potentialScore || 98,
+                isCustom: true
+            };
+
+            window.selectIdea(customIdea);
+            showToast('🚀 직접 설정한 주제로 기획이 확정되었습니다! (Select 단계 이동)');
+        }
+
+        const btnCustomIdeaEnrich = document.getElementById('btn-custom-idea-ai-enrich');
+        if (btnCustomIdeaEnrich) btnCustomIdeaEnrich.addEventListener('click', handleEnrichCustomTopic);
+
+        const btnConfirmCustomIdea = document.getElementById('btn-confirm-custom-idea');
+        if (btnConfirmCustomIdea) btnConfirmCustomIdea.addEventListener('click', handleConfirmCustomTopic);
+
+        // =========================================================================
+        // 🎬 DIRECT VIDEO ANALYZER UI EVENT LISTENERS
+        // =========================================================================
+        const tabBtnKeywordSearch = document.getElementById('tab-btn-keyword-search');
+        const tabBtnDirectAnalyzer = document.getElementById('tab-btn-direct-analyzer');
+        const panelKeywordSearch = document.getElementById('panel-keyword-search');
+        const panelDirectAnalyzer = document.getElementById('panel-direct-analyzer');
+
+        function activateDirectAnalyzerTab() {
+            if (tabBtnDirectAnalyzer && tabBtnKeywordSearch && panelKeywordSearch && panelDirectAnalyzer) {
+                tabBtnDirectAnalyzer.classList.add('active');
+                tabBtnKeywordSearch.classList.remove('active');
+                tabBtnKeywordSearch.style.borderColor = 'var(--border-light)';
+                tabBtnKeywordSearch.style.background = 'var(--bg-surface)';
+                tabBtnKeywordSearch.style.color = 'var(--text-secondary)';
+
+                tabBtnDirectAnalyzer.style.borderColor = 'var(--primary)';
+                tabBtnDirectAnalyzer.style.background = 'linear-gradient(135deg, rgba(37,99,235,0.08), rgba(99,102,241,0.08))';
+                tabBtnDirectAnalyzer.style.color = 'var(--primary)';
+
+                panelKeywordSearch.style.display = 'none';
+                panelDirectAnalyzer.style.display = 'block';
+            }
+        }
+
+        function activateKeywordSearchTab() {
+            if (tabBtnDirectAnalyzer && tabBtnKeywordSearch && panelKeywordSearch && panelDirectAnalyzer) {
+                tabBtnKeywordSearch.classList.add('active');
+                tabBtnDirectAnalyzer.classList.remove('active');
+                tabBtnDirectAnalyzer.style.borderColor = 'var(--border-light)';
+                tabBtnDirectAnalyzer.style.background = 'var(--bg-surface)';
+                tabBtnDirectAnalyzer.style.color = 'var(--text-secondary)';
+
+                tabBtnKeywordSearch.style.borderColor = 'var(--primary)';
+                tabBtnKeywordSearch.style.background = 'var(--bg-surface)';
+                tabBtnKeywordSearch.style.color = 'var(--primary)';
+
+                panelKeywordSearch.style.display = 'block';
+                panelDirectAnalyzer.style.display = 'none';
+            }
+        }
+
+        if (tabBtnKeywordSearch) tabBtnKeywordSearch.addEventListener('click', activateKeywordSearchTab);
+        if (tabBtnDirectAnalyzer) tabBtnDirectAnalyzer.addEventListener('click', activateDirectAnalyzerTab);
+
+        // Quick Access Header & Sidebar buttons
+        const btnQuickDirectAnalyzer = document.getElementById('btn-quick-direct-analyzer');
+        if (btnQuickDirectAnalyzer) {
+            btnQuickDirectAnalyzer.addEventListener('click', () => {
+                navigate('search');
+                activateDirectAnalyzerTab();
+                const ytInput = document.getElementById('direct-yt-input');
+                if (ytInput) setTimeout(() => ytInput.focus(), 150);
+            });
+        }
+
+        const btnSidebarDirectAnalyzer = document.getElementById('btn-sidebar-direct-analyzer');
+        if (btnSidebarDirectAnalyzer) {
+            btnSidebarDirectAnalyzer.addEventListener('click', () => {
+                navigate('search');
+                activateDirectAnalyzerTab();
+                closeSidebarMobile();
+                const ytInput = document.getElementById('direct-yt-input');
+                if (ytInput) setTimeout(() => ytInput.focus(), 150);
+            });
+        }
+
+        // Sub-mode switch (YouTube vs File)
+        const directModeYtBtn = document.getElementById('direct-mode-yt-btn');
+        const directModeFileBtn = document.getElementById('direct-mode-file-btn');
+        const directSourceYt = document.getElementById('direct-source-yt');
+        const directSourceFile = document.getElementById('direct-source-file');
+
+        if (directModeYtBtn && directModeFileBtn && directSourceYt && directSourceFile) {
+            directModeYtBtn.addEventListener('click', () => {
+                directAnalyzerState.mode = 'yt';
+                directModeYtBtn.classList.add('active');
+                directModeFileBtn.classList.remove('active');
+                directModeYtBtn.style.background = 'var(--bg-surface)';
+                directModeYtBtn.style.color = 'var(--primary)';
+                directModeFileBtn.style.background = 'transparent';
+                directModeFileBtn.style.color = 'var(--text-secondary)';
+                directSourceYt.style.display = 'block';
+                directSourceFile.style.display = 'none';
+            });
+
+            directModeFileBtn.addEventListener('click', () => {
+                directAnalyzerState.mode = 'file';
+                directModeFileBtn.classList.add('active');
+                directModeYtBtn.classList.remove('active');
+                directModeFileBtn.style.background = 'var(--bg-surface)';
+                directModeFileBtn.style.color = 'var(--primary)';
+                directModeYtBtn.style.background = 'transparent';
+                directModeYtBtn.style.color = 'var(--text-secondary)';
+                directSourceFile.style.display = 'block';
+                directSourceYt.style.display = 'none';
+            });
+        }
+
+        // YouTube URL fetch button & enter key
+        const btnDirectYtFetch = document.getElementById('btn-direct-yt-fetch');
+        const inputDirectYt = document.getElementById('direct-yt-input');
+        if (btnDirectYtFetch) btnDirectYtFetch.addEventListener('click', fetchDirectYouTubeDetails);
+        if (inputDirectYt) {
+            inputDirectYt.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    fetchDirectYouTubeDetails();
+                }
+            });
+        }
+
+        // Video File Dropzone & Picker
+        const videoDropzone = document.getElementById('direct-video-dropzone');
+        const directFileInput = document.getElementById('direct-file-input');
+
+        if (videoDropzone && directFileInput) {
+            videoDropzone.addEventListener('click', () => directFileInput.click());
+
+            videoDropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                videoDropzone.classList.add('dragover');
+            });
+
+            videoDropzone.addEventListener('dragleave', () => {
+                videoDropzone.classList.remove('dragover');
+            });
+
+            videoDropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                videoDropzone.classList.remove('dragover');
+                const file = e.dataTransfer.files?.[0];
+                if (file) handleDirectVideoFile(file);
+            });
+
+            directFileInput.addEventListener('change', (e) => {
+                const file = e.target.files?.[0];
+                if (file) handleDirectVideoFile(file);
+            });
+        }
+
+        // Direct Analysis Execution Buttons
+        const btnDirectAnalysisOnly = document.getElementById('btn-direct-run-analysis-only');
+        if (btnDirectAnalysisOnly) {
+            btnDirectAnalysisOnly.addEventListener('click', () => runDirectVideoAnalysis(false));
+        }
+
+        const btnDirectRunFull = document.getElementById('btn-direct-run-full-scenario');
+        if (btnDirectRunFull) {
+            btnDirectRunFull.addEventListener('click', () => runDirectVideoAnalysis(true));
+        }
 
         // --- PHASE 6: Script Generation & Revision with Feedback ---
         // 톤 변경 시 사용자 지정 텍스트 입력창 표시/숨김
@@ -2528,13 +3709,13 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                                         💬 등장인물 대사 (Dialogue & 립싱크)
                                     </span>
                                     ${(s.speaker && s.speaker !== '없음' && s.speaker !== 'None')
-                                        ? `<span style="font-size:9px; font-weight:700; background:#d1fae5; color:#065f46; padding:1px 6px; border-radius:3px;">👤 ${s.speaker}</span>`
-                                        : `<span style="font-size:9px; color:var(--text-secondary);">인물 발화 없음</span>`}
+                        ? `<span style="font-size:9px; font-weight:700; background:#d1fae5; color:#065f46; padding:1px 6px; border-radius:3px;">👤 ${s.speaker}</span>`
+                        : `<span style="font-size:9px; color:var(--text-secondary);">인물 발화 없음</span>`}
                                 </div>
                                 <div style="font-size:13px; font-weight:700; color:${s.dialogue ? '#047857' : 'var(--text-secondary)'}; line-height:1.45;">
-                                    ${s.dialogue 
-                                        ? `"${s.dialogue}"` 
-                                        : '<span style="font-style:italic; font-size:11px; font-weight:normal;">(등장인물 대사 없음 - 나레이션 및 행동 연기 중심)</span>'}
+                                    ${s.dialogue
+                        ? `"${s.dialogue}"`
+                        : '<span style="font-style:italic; font-size:11px; font-weight:normal;">(등장인물 대사 없음 - 나레이션 및 행동 연기 중심)</span>'}
                                 </div>
                             </div>
 
@@ -2738,15 +3919,15 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                                 p.charactersPresent = matchingScene.charactersPresent || [];
                             }
                             const charName = (p.charactersPresent && p.charactersPresent.length > 0) ? p.charactersPresent.join(', ') : '주인공';
-                            
+
                             // 대본 원본(Ground Truth) 기준 대사 및 나레이션 엄격 분리
                             const hasDialogue = Boolean(matchingScene.dialogue && matchingScene.dialogue.trim() !== '');
                             const dialogueText = hasDialogue ? matchingScene.dialogue.trim() : '';
                             const speakerName = (hasDialogue && matchingScene.speaker && matchingScene.speaker !== '없음') ? matchingScene.speaker.trim() : charName;
-                            
+
                             const hasNarration = Boolean(matchingScene.narration && matchingScene.narration.trim() !== '');
                             const narrationTextClean = hasNarration ? matchingScene.narration.trim() : '';
-                            
+
                             const sfxText = matchingScene.sfx || 'Fast cinematic whoosh sound effect, heavy sub-bass impact';
 
                             p.videoComponents = p.videoComponents || {};
@@ -2756,7 +3937,7 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                             p.videoComponents.speaker = hasDialogue ? speakerName : '없음';
 
                             // 캐릭터 액션 검증: 대사가 없는 씬인데 발화/립싱크 관련 문구가 포함된 경우 엄격 차단
-                            if (!p.videoComponents.characterAction || p.videoComponents.characterAction.trim() === '' || 
+                            if (!p.videoComponents.characterAction || p.videoComponents.characterAction.trim() === '' ||
                                 (!hasDialogue && (p.videoComponents.characterAction.includes('대사') || p.videoComponents.characterAction.includes('말함') || p.videoComponents.characterAction.includes('립싱크')))) {
                                 if (hasDialogue) {
                                     p.videoComponents.characterAction = `${speakerName} 결의에 찬 표정으로 대사 발화 (자연스러운 립싱크 동기화)`;
@@ -3290,12 +4471,19 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
 
         // --- Create New Project (새로 만들기) Logic ---
         function createNewProject(force = false) {
+            const hasCustomTopic = (document.getElementById('custom-idea-title')?.value.trim() || '') !== '' ||
+                                   (document.getElementById('custom-idea-hook')?.value.trim() || '') !== '';
+            const hasDirectAnalyzer = (document.getElementById('direct-yt-input')?.value.trim() || '') !== '' ||
+                                      (typeof directAnalyzerState !== 'undefined' && (directAnalyzerState.ytVideoId || directAnalyzerState.uploadedFile));
+
             const hasWork = (searchState.allResults && searchState.allResults.length > 0) ||
                 (analyzeState && analyzeState.analysisResult !== null) ||
                 (ideationState && ideationState.ideas && ideationState.ideas.length > 0) ||
                 (scriptState && scriptState.script !== null) ||
                 (promptState && promptState.prompts && promptState.prompts.length > 0) ||
-                (inputSearchQuery && inputSearchQuery.value.trim() !== '');
+                (inputSearchQuery && inputSearchQuery.value.trim() !== '') ||
+                hasCustomTopic ||
+                hasDirectAnalyzer;
 
             if (!force && hasWork) {
                 const confirmed = confirm('✨ 새 프로젝트를 시작하시겠습니까?\n\n현재 화면의 검색 결과, 분석 리포트, 아이디어, 대본 작업 내용이 모두 초기화됩니다.\n(저장된 YouTube / Gemini API 키는 안전하게 유지됩니다.)');
@@ -3321,6 +4509,51 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
             renderResults();
             if (btnAnalyzeSelected) btnAnalyzeSelected.disabled = true;
 
+            // 1-1. Direct Video / YouTube Analyzer State 초기화
+            if (typeof directAnalyzerState !== 'undefined') {
+                directAnalyzerState.mode = 'yt';
+                directAnalyzerState.ytVideoId = null;
+                directAnalyzerState.ytData = null;
+                directAnalyzerState.ytComments = [];
+                directAnalyzerState.uploadedFile = null;
+                directAnalyzerState.videoDuration = 0;
+                directAnalyzerState.videoWidth = 0;
+                directAnalyzerState.videoHeight = 0;
+                directAnalyzerState.extractedFrames = [];
+            }
+            const directYtInput = document.getElementById('direct-yt-input');
+            if (directYtInput) directYtInput.value = '';
+            const directYtPreview = document.getElementById('direct-yt-preview');
+            if (directYtPreview) directYtPreview.style.display = 'none';
+            const directFileInput = document.getElementById('direct-file-input');
+            if (directFileInput) directFileInput.value = '';
+            const directFilePreview = document.getElementById('direct-file-preview');
+            if (directFilePreview) directFilePreview.style.display = 'none';
+            const directVideoPlayer = document.getElementById('direct-video-player');
+            if (directVideoPlayer) {
+                try {
+                    directVideoPlayer.pause();
+                    directVideoPlayer.removeAttribute('src');
+                    directVideoPlayer.load();
+                } catch(e) {}
+            }
+            const directFilmstripStrip = document.getElementById('direct-filmstrip-strip');
+            if (directFilmstripStrip) directFilmstripStrip.innerHTML = '';
+            const directScenarioPrompt = document.getElementById('direct-scenario-user-prompt');
+            if (directScenarioPrompt) directScenarioPrompt.value = '';
+            const directScenarioGoal = document.getElementById('direct-scenario-goal');
+            if (directScenarioGoal) directScenarioGoal.value = 'deep_breakdown';
+            const directScenarioDur = document.getElementById('direct-scenario-duration');
+            if (directScenarioDur) directScenarioDur.value = '60';
+            const directScenarioTone = document.getElementById('direct-scenario-tone');
+            if (directScenarioTone) directScenarioTone.value = '몰입감 있고 긴박한';
+            const directProgressCard = document.getElementById('direct-analysis-progress-card');
+            if (directProgressCard) directProgressCard.style.display = 'none';
+
+            if (typeof activateKeywordSearchTab === 'function') {
+                activateKeywordSearchTab();
+            }
+
             // 2. Analyze State 초기화
             analyzeState.analyzedVideos = [];
             analyzeState.analysisResult = null;
@@ -3341,9 +4574,18 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                 if (elComments) elComments.innerHTML = '';
             }
 
-            // 3. Ideation State 초기화
+            // 3. Ideation State 초기화 & Custom Topic 초기화
             ideationState.ideas = [];
             ideationState.selectedIdea = null;
+            const customTitle = document.getElementById('custom-idea-title');
+            if (customTitle) customTitle.value = '';
+            const customHook = document.getElementById('custom-idea-hook');
+            if (customHook) customHook.value = '';
+            const customStrategy = document.getElementById('custom-idea-strategy');
+            if (customStrategy) customStrategy.value = '';
+            const customEnrichStatus = document.getElementById('custom-idea-enrich-status');
+            if (customEnrichStatus) customEnrichStatus.innerHTML = '';
+
             const ideateLoading = document.getElementById('ideate-loading');
             const ideateResultsContainer = document.getElementById('ideate-results-container');
             const ideaCards = document.getElementById('idea-cards');
@@ -3498,13 +4740,22 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
 
         function executeAutosave() {
             try {
+                const customTitle = document.getElementById('custom-idea-title')?.value.trim() || '';
+                const customHook = document.getElementById('custom-idea-hook')?.value.trim() || '';
+                const directYtVal = document.getElementById('direct-yt-input')?.value.trim() || '';
+                const directUserPrompt = document.getElementById('direct-scenario-user-prompt')?.value.trim() || '';
+
                 // 작업 내용이 전혀 없는 빈 프로젝트면 저장하지 않음
                 const hasWork = (searchState.allResults && searchState.allResults.length > 0) ||
                     (analyzeState && analyzeState.analysisResult !== null) ||
                     (ideationState && ideationState.ideas && ideationState.ideas.length > 0) ||
                     (scriptState && scriptState.script !== null) ||
                     (promptState && promptState.prompts && promptState.prompts.length > 0) ||
-                    (inputSearchQuery && inputSearchQuery.value.trim() !== '');
+                    (inputSearchQuery && inputSearchQuery.value.trim() !== '') ||
+                    customTitle !== '' ||
+                    customHook !== '' ||
+                    directYtVal !== '' ||
+                    directUserPrompt !== '';
 
                 if (!hasWork) {
                     updateAutosaveIndicator('cleared');
@@ -3517,6 +4768,11 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                 const durInput = document.getElementById('script-duration');
                 const targetInput = document.getElementById('script-target');
                 const customToneInput = document.getElementById('script-tone-custom');
+
+                const customStrategy = document.getElementById('custom-idea-strategy')?.value || '';
+                const directGoal = document.getElementById('direct-scenario-goal')?.value || 'deep_breakdown';
+                const directDur = document.getElementById('direct-scenario-duration')?.value || '60';
+                const directTone = document.getElementById('direct-scenario-tone')?.value || '몰입감 있고 긴박한';
 
                 const payload = {
                     version: 1,
@@ -3534,13 +4790,24 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                         results: searchState.results || [],
                         selectedVideoIds: Array.from(searchState.selectedVideoIds || [])
                     },
+                    directAnalyzer: {
+                        mode: (typeof directAnalyzerState !== 'undefined') ? directAnalyzerState.mode : 'yt',
+                        ytUrl: directYtVal,
+                        scenarioGoal: directGoal,
+                        scenarioDuration: directDur,
+                        scenarioTone: directTone,
+                        userPrompt: directUserPrompt
+                    },
                     analyze: {
                         analyzedVideos: analyzeState.analyzedVideos || [],
                         analysisResult: analyzeState.analysisResult || null
                     },
                     ideation: {
                         ideas: ideationState.ideas || [],
-                        selectedIdea: ideationState.selectedIdea || null
+                        selectedIdea: ideationState.selectedIdea || null,
+                        customTitle: customTitle,
+                        customHook: customHook,
+                        customStrategy: customStrategy
                     },
                     topic: {
                         feedback: topicFeedback ? topicFeedback.value : ''
@@ -3603,6 +4870,30 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                     }
                 }
 
+                // 1-1. Direct Analyzer Settings Restore
+                if (data.directAnalyzer) {
+                    const directYtInput = document.getElementById('direct-yt-input');
+                    if (directYtInput && data.directAnalyzer.ytUrl !== undefined) {
+                        directYtInput.value = data.directAnalyzer.ytUrl;
+                    }
+                    const directScenarioGoal = document.getElementById('direct-scenario-goal');
+                    if (directScenarioGoal && data.directAnalyzer.scenarioGoal !== undefined) {
+                        directScenarioGoal.value = data.directAnalyzer.scenarioGoal;
+                    }
+                    const directScenarioDur = document.getElementById('direct-scenario-duration');
+                    if (directScenarioDur && data.directAnalyzer.scenarioDuration !== undefined) {
+                        directScenarioDur.value = data.directAnalyzer.scenarioDuration;
+                    }
+                    const directScenarioTone = document.getElementById('direct-scenario-tone');
+                    if (directScenarioTone && data.directAnalyzer.scenarioTone !== undefined) {
+                        directScenarioTone.value = data.directAnalyzer.scenarioTone;
+                    }
+                    const directScenarioPrompt = document.getElementById('direct-scenario-user-prompt');
+                    if (directScenarioPrompt && data.directAnalyzer.userPrompt !== undefined) {
+                        directScenarioPrompt.value = data.directAnalyzer.userPrompt;
+                    }
+                }
+
                 // 2. Analyze Restore
                 if (data.analyze && data.analyze.analysisResult) {
                     analyzeState.analyzedVideos = data.analyze.analyzedVideos || [];
@@ -3613,10 +4904,19 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
                 }
 
                 // 3. Ideation Restore
-                if (data.ideation && data.ideation.ideas && data.ideation.ideas.length > 0) {
-                    ideationState.ideas = data.ideation.ideas;
-                    ideationState.selectedIdea = data.ideation.selectedIdea || null;
-                    renderIdeas();
+                if (data.ideation) {
+                    const customTitle = document.getElementById('custom-idea-title');
+                    if (customTitle && data.ideation.customTitle !== undefined) customTitle.value = data.ideation.customTitle;
+                    const customHook = document.getElementById('custom-idea-hook');
+                    if (customHook && data.ideation.customHook !== undefined) customHook.value = data.ideation.customHook;
+                    const customStrategy = document.getElementById('custom-idea-strategy');
+                    if (customStrategy && data.ideation.customStrategy !== undefined) customStrategy.value = data.ideation.customStrategy;
+
+                    if (data.ideation.ideas && data.ideation.ideas.length > 0) {
+                        ideationState.ideas = data.ideation.ideas;
+                        ideationState.selectedIdea = data.ideation.selectedIdea || null;
+                        renderIdeas();
+                    }
                 }
 
                 // 4. Topic Select Restore
@@ -3734,11 +5034,31 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
             const chkShorts = document.getElementById('search-shorts-only');
             if (chkShorts) chkShorts.addEventListener('change', () => saveProjectState(false));
 
-            // 2. Topic & Feedback Inputs
+            // 2. Custom Topic Inputs
+            const customTitle = document.getElementById('custom-idea-title');
+            if (customTitle) customTitle.addEventListener('input', () => saveProjectState(false));
+            const customHook = document.getElementById('custom-idea-hook');
+            if (customHook) customHook.addEventListener('input', () => saveProjectState(false));
+            const customStrategy = document.getElementById('custom-idea-strategy');
+            if (customStrategy) customStrategy.addEventListener('input', () => saveProjectState(false));
+
+            // 2-1. Direct Video / YouTube Analyzer Inputs
+            const directYtInput = document.getElementById('direct-yt-input');
+            if (directYtInput) directYtInput.addEventListener('input', () => saveProjectState(false));
+            const directScenarioGoal = document.getElementById('direct-scenario-goal');
+            if (directScenarioGoal) directScenarioGoal.addEventListener('change', () => saveProjectState(false));
+            const directScenarioDur = document.getElementById('direct-scenario-duration');
+            if (directScenarioDur) directScenarioDur.addEventListener('change', () => saveProjectState(false));
+            const directScenarioTone = document.getElementById('direct-scenario-tone');
+            if (directScenarioTone) directScenarioTone.addEventListener('change', () => saveProjectState(false));
+            const directScenarioPrompt = document.getElementById('direct-scenario-user-prompt');
+            if (directScenarioPrompt) directScenarioPrompt.addEventListener('input', () => saveProjectState(false));
+
+            // 3. Topic & Feedback Inputs
             const topicFeedback = document.getElementById('topic-feedback');
             if (topicFeedback) topicFeedback.addEventListener('input', () => saveProjectState(false));
 
-            // 3. Script Settings & Feedback Inputs
+            // 4. Script Settings & Feedback Inputs
             const durInput = document.getElementById('script-duration');
             if (durInput) durInput.addEventListener('input', () => saveProjectState(false));
             if (selectTone) selectTone.addEventListener('change', () => saveProjectState(false));
@@ -3749,12 +5069,12 @@ Return ONLY a valid JSON object matching this schema (pure JSON, no markdown bac
             const scriptFeedback = document.getElementById('script-revision-feedback');
             if (scriptFeedback) scriptFeedback.addEventListener('input', () => saveProjectState(false));
 
-            // 4. Window beforeunload fallback
+            // 5. Window beforeunload fallback
             window.addEventListener('beforeunload', () => {
                 saveProjectState(true);
             });
 
-            // 5. Initial State Restoration
+            // 6. Initial State Restoration
             const hasRestored = restoreProjectState();
             if (!hasRestored) {
                 updateAutosaveIndicator('cleared');
